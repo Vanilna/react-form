@@ -2,6 +2,8 @@ import React, { Fragment, useState } from "react";
 import FormSection from "../../Containers/FormSection/FormSection";
 import Button from "../../Containers/Button/Button";
 import classes from "./Form.module.css";
+import InputWrapper from "../../Containers/InputWrapper/InputWrapper";
+import Input from "../../Containers/Input/Input";
 
 const Form = () => {
   const [isDisabled, setDisabled] = useState(true);
@@ -15,7 +17,16 @@ const Form = () => {
       </header>
       <form onSubmit={handleSubmit} className={classes.Form}>
         <FormSection name="About">
-          <p>here</p>
+          <InputWrapper label="title" isRequired={true}>
+            <Input
+              elementType="input"
+              elementConfig={{
+                type: "text",
+                placeholder: "Make it Short and Clear"
+              }}
+              isLabelVisible={false}
+            />
+          </InputWrapper>
         </FormSection>
         <FormSection name="Coordinator">
           <p>here</p>

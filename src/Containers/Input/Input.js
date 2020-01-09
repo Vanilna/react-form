@@ -62,7 +62,7 @@ const Input = props => {
 
   return (
     <label
-      className={props.IsLabelVisible ? classes.LabelVisible : classes.Label}
+      className={props.isLabelVisible ? classes.LabelVisible : classes.Label}
     >
       {inputElement}
       {props.label}

@@ -1,0 +1,23 @@
+.Wrapper {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: 1fr;
+  justify-content: start;
+  align-items: center;
+}
+
+.Label {
+  grid-column: 1 / 2;
+  color: #8ca2c2;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.Required {
+  color: rgb(214, 4, 4);
+}
+
+.InputContent {
+  grid-column: 2 / -1;
+}
