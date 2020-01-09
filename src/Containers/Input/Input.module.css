@@ -4,4 +4,26 @@
   color: #676767;
   padding: 0.4rem;
   font-family: inherit;
+  width: 99%;
+}
+
+.Input::placeholder,
+.Input option {
+  color: #c9c9c9;
+  font-size: 0.9rem;
+}
+
+.LabelVisible {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #676767;
+}
+
+.Label {
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
 }

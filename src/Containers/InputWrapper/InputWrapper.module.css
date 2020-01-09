@@ -20,4 +20,5 @@
 
 .InputContent {
   grid-column: 2 / -1;
+  display: flex;
 }

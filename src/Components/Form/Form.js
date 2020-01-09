@@ -4,11 +4,13 @@ import Button from "../../Containers/Button/Button";
 import classes from "./Form.module.css";
 import InputWrapper from "../../Containers/InputWrapper/InputWrapper";
 import Input from "../../Containers/Input/Input";
+import ErrorTooltip from "../../Containers/ErrorTooltip/ErrorTooltip";
 
 const Form = () => {
   const [isDisabled, setDisabled] = useState(true);
   const handleSubmit = () => {};
   const handleButtonClick = () => {};
+  const isValid = true;
 
   return (
     <Fragment>
@@ -18,14 +20,22 @@ const Form = () => {
       <form onSubmit={handleSubmit} className={classes.Form}>
         <FormSection name="About">
           <InputWrapper label="title" isRequired={true}>
-            <Input
-              elementType="input"
-              elementConfig={{
-                type: "text",
-                placeholder: "Make it Short and Clear"
-              }}
-              isLabelVisible={false}
-            />
+            <div className={classes.InputField}>
+              <Input
+                elementType="input"
+                elementConfig={{
+                  type: "text",
+                  placeholder: "Make it Short and Clear"
+                }}
+                isLabelVisible={false}
+              />
+            </div>
+            {isValid && (
+              <ErrorTooltip
+                className={classes.Error}
+                errorMassage="Required name"
+              />
+            )}
           </InputWrapper>
         </FormSection>
         <FormSection name="Coordinator">

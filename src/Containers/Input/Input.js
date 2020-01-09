@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import classes from "./Input.module.css";
 
 const Input = props => {
@@ -17,6 +17,7 @@ const Input = props => {
           {...props.elementConfig}
           value={props.value}
           onChange={props.handleChange}
+          id={props.key}
         />
       );
       break;
@@ -27,6 +28,7 @@ const Input = props => {
           {...props.elementConfig}
           value={props.value}
           onChange={props.handleChange}
+          id={props.key}
         />
       );
       break;
@@ -36,6 +38,7 @@ const Input = props => {
           className={inputClasses.join("")}
           value={props.value}
           onChange={props.handleChange}
+          id={props.key}
         >
           {props.elementConfig.options.map(option => (
             <option
@@ -56,17 +59,21 @@ const Input = props => {
           {...props.elementConfig}
           value={props.value}
           onChange={props.handleChange}
+          id={props.key}
         />
       );
   }
 
   return (
-    <label
-      className={props.isLabelVisible ? classes.LabelVisible : classes.Label}
-    >
+    <Fragment>
       {inputElement}
-      {props.label}
-    </label>
+      <label
+        className={props.isLabelVisible ? classes.LabelVisible : classes.Label}
+        htmlFor={props.key}
+      >
+        {props.label}
+      </label>
+    </Fragment>
   );
 };
 
