@@ -6,7 +6,7 @@ import classes from "./Form.module.css";
 const Form = () => {
   const [isDisabled, setDisabled] = useState(true);
   const handleSubmit = () => {};
-  const handleClick = () => {};
+  const handleButtonClick = () => {};
 
   return (
     <Fragment>
@@ -25,7 +25,7 @@ const Form = () => {
         </FormSection>
         <Button
           name="Publish Event"
-          clickHandler={handleClick}
+          clickHandler={handleButtonClick}
           disabled={isDisabled}
         />
       </form>
