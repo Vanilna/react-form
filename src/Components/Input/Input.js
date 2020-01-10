@@ -18,6 +18,7 @@ const Input = props => {
           value={props.value}
           onChange={props.handleChange}
           id={props.key}
+          name={props.name}
         />
       );
       break;
@@ -43,13 +44,33 @@ const Input = props => {
           {props.elementConfig.options.map(option => (
             <option
               key={option.id}
-              value={option.value}
+              value={option.name}
               disabled={option.disabled}
             >
-              {option.value}
+              {option.name}
             </option>
           ))}
         </select>
+      );
+      break;
+    case "radio__group":
+      inputElement = (
+        <div className={classes.Input__Group}>
+          {props.elementConfig.options.map(element => (
+            <Fragment key={element.id}>
+              <input
+                className={inputClasses.join("")}
+                {...element.elementConfig}
+                onChange={props.handleChange}
+                name={element.name}
+                id={element.name}
+              />
+              <label htmlFor={element.name} className={classes.LabelVisible}>
+                {element.label}
+              </label>
+            </Fragment>
+          ))}
+        </div>
       );
       break;
     default:
@@ -67,12 +88,12 @@ const Input = props => {
   return (
     <Fragment>
       {inputElement}
-      <label
+      {/* <label
         className={props.isLabelVisible ? classes.LabelVisible : classes.Label}
         htmlFor={props.key}
       >
         {props.label}
-      </label>
+      </label> */}
     </Fragment>
   );
 };

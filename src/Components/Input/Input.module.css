@@ -13,10 +13,24 @@
   font-size: 0.9rem;
 }
 
+textarea.Input {
+  resize: none;
+}
+
+.Input__Group {
+  display: flex;
+  justify-items: start;
+}
+
+.Input__Group .Input {
+  width: auto;
+}
+
 .LabelVisible {
   font-size: 0.9rem;
   font-weight: 500;
   color: #676767;
+  display: flex;
 }
 
 .Label {
