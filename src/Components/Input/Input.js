@@ -17,8 +17,8 @@ const Input = props => {
           {...props.elementConfig}
           value={props.value}
           onChange={props.handleChange}
+          onBlur={props.validate}
           id={props.key}
-          name={props.name}
         />
       );
       break;
@@ -29,6 +29,7 @@ const Input = props => {
           {...props.elementConfig}
           value={props.value}
           onChange={props.handleChange}
+          onBlur={props.validate}
           id={props.key}
         />
       );
@@ -39,6 +40,7 @@ const Input = props => {
           className={inputClasses.join("")}
           value={props.value}
           onChange={props.handleChange}
+          onBlur={props.validate}
           id={props.key}
         >
           {props.elementConfig.options.map(option => (
@@ -80,6 +82,7 @@ const Input = props => {
           {...props.elementConfig}
           value={props.value}
           onChange={props.handleChange}
+          onBlur={props.validate}
           id={props.key}
         />
       );

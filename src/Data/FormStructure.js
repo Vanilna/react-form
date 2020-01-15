@@ -1,3 +1,6 @@
+import categories from "./categories.json";
+import employees from "./employees.json";
+
 const formStructure = {
   title: {
     elementType: "input",
@@ -8,11 +11,11 @@ const formStructure = {
       "aria-label": "Title"
     },
     isLabelVisible: false,
-    errorMassage: "",
     value: "",
     validationRules: {
       required: true
     },
+    errorMassage: "",
     valid: true,
     touched: false
   },
@@ -26,12 +29,12 @@ const formStructure = {
       rows: 4
     },
     isLabelVisible: false,
-    errorMassage: "",
     value: "",
     validationRules: {
       required: true,
       maxlength: 140
     },
+    errorMassage: "",
     valid: true,
     touched: false
   },
@@ -40,32 +43,11 @@ const formStructure = {
     elementConfig: {
       name: "category",
       "aria-label": "Category",
-      options: [
-        {
-          id: 0,
-          name: "Cycling"
-        },
-        {
-          id: 1,
-          name: "Hiking"
-        },
-        {
-          id: 2,
-          name: "Cooking"
-        },
-        {
-          id: 3,
-          name: "Rock climbing"
-        },
-        {
-          id: 4,
-          name: "Yoga"
-        }
-      ]
+      options: [...categories]
     },
     isLabelVisible: false,
     value: "",
-    validationRules: {},
+    validationRules: null,
     valid: true,
     touched: false
   },
@@ -99,7 +81,25 @@ const formStructure = {
     },
     isLabelVisible: false,
     value: "free",
-    validationRules: {},
+    validationRules: null,
+    valid: true,
+    touched: false
+  },
+  fee: {
+    elementType: "input",
+    elementConfig: {
+      type: "number",
+      name: "fee",
+      step: "0.01",
+      placeholder: "Number",
+      "aria-label": "Fee"
+    },
+    isLabelVisible: true,
+    value: "",
+    validationRules: {
+      decimals: 2
+    },
+    errorMassage: "",
     valid: true,
     touched: false
   },
@@ -108,15 +108,16 @@ const formStructure = {
     elementConfig: {
       type: "number",
       name: "reward",
+      step: 1,
       placeholder: "Number",
       "aria-label": "Reward"
     },
     isLabelVisible: true,
-    errorMassage: "",
     value: "",
     validationRules: {
-      isNumber: true
+      decimals: 0
     },
+    errorMassage: "",
     valid: true,
     touched: false
   },
@@ -125,37 +126,13 @@ const formStructure = {
     elementConfig: {
       name: "responsible",
       "aria-label": "Responsible",
-      options: [
-        {
-          id: 0,
-          name: "Daniel",
-          lastname: "Mitchell",
-          email: "daniel.mitchell@hussa.rs"
-        },
-        {
-          id: 1,
-          name: "Albert",
-          lastname: "Alexander",
-          email: "albert.alexander@hussa.rs"
-        },
-        {
-          id: 2,
-          name: "Philip",
-          lastname: "Hughes",
-          email: "philip.hughes@hussa.rs"
-        },
-        {
-          id: 3,
-          name: "Walter",
-          lastname: "Nelson",
-          email: "walter.nelson@hussa.rs"
-        }
-      ]
+      options: [...employees]
     },
-    value: "first",
+    value: "",
     validationRules: {
       required: true
     },
+    errorMassage: "",
     valid: true,
     touched: false
   },
@@ -172,10 +149,11 @@ const formStructure = {
       required: true,
       isEmail: true
     },
+    errorMassage: "",
     valid: true,
     touched: false
   },
-  startsOn: {
+  date: {
     elementType: "input",
     elementConfig: {
       type: "date",
@@ -184,9 +162,57 @@ const formStructure = {
     },
     value: "",
     validationRules: {
-      required: true,
-      isDate: true
+      required: true
     },
+    valid: true,
+    touched: false
+  },
+  time: {
+    elementType: "input",
+    elementConfig: {
+      type: "time",
+      name: "time",
+      "aria-label": "Time"
+    },
+    value: "",
+    validationRules: {
+      required: true
+    },
+    valid: true,
+    touched: false
+  },
+  timePeriod: {
+    elementType: "radio__group",
+    elementConfig: {
+      options: [
+        {
+          elementConfig: {
+            type: "radio",
+            value: "AM",
+            name: "period",
+            checked: true,
+            "aria-label": "AM"
+          },
+          label: "AM",
+          id: 1
+        },
+        {
+          elementConfig: {
+            type: "radio",
+            name: "period",
+            value: "PM",
+            checked: false,
+            "aria-label": "PM"
+          },
+          label: "PM",
+          id: 2
+        }
+      ],
+      name: "period"
+    },
+    isLabelVisible: false,
+    value: "AM",
+    validationRules: null,
     valid: true,
     touched: false
   },
@@ -195,14 +221,16 @@ const formStructure = {
     elementConfig: {
       type: "number",
       name: "duration",
+      step: "0.5",
       placeholder: "Number",
       "aria-label": "Duration"
     },
     value: "",
     validationRules: {
       required: true,
-      isNumber: true
+      decimals: 1
     },
+    errorMassage: "",
     valid: true,
     touched: false
   }

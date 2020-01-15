@@ -18,3 +18,9 @@
   max-width: 700px;
   margin: 0 auto;
 }
+
+.inline {
+  display: flex;
+  align-items: center;
+  justify-items: start;
+}

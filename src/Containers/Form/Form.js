@@ -8,26 +8,90 @@ import ErrorTooltip from "../../Components/ErrorTooltip/ErrorTooltip";
 import formStructure from "../../Data/FormStructure";
 
 const Form = () => {
+  const [elementsConfig, setElementsConfig] = useState(formStructure);
+  const [isFromValid, setFromValidity] = useState(false);
+
+  const handleChange = e => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setElementsConfig({
+      ...elementsConfig,
+      [name]: {
+        ...elementsConfig[name],
+        value: value
+      }
+    });
+  };
+
+  const validate = (name, validationRules) => {
+    if (!validationRules) return;
+
+    let isValid = true;
+    const errorMassage = [];
+    const value = elementsConfig[name].value;
+
+    for (let key in validationRules) {
+      switch (key) {
+        case "required":
+          const isEmpty = value.trim() === "";
+          isValid = isValid && !isEmpty;
+          errorMassage.push(`${name} is required`);
+          break;
+        case "maxlength":
+          const toLong = value.length > validationRules[key];
+          isValid = isValid && !toLong;
+          console.log(isValid, !toLong);
+          errorMassage.push("Text is to long");
+          break;
+        case "isEmail":
+          const isEmail = value.indexOf("@") !== -1;
+          isValid = isValid && isEmail;
+          errorMassage.push("Not a valid email");
+          break;
+        case "decimals":
+          const dotIndex = value.indexOf(".");
+          const commaIndex = value.indexOf(",");
+          const isInteger = (dotIndex || commaIndex) === -1;
+          if (isInteger) break;
+          console.log(isInteger);
+          const validDecimals =
+            dotIndex !== -1
+              ? dotIndex >= value.length - 1 - validationRules[key]
+              : commaIndex >= value.length - 1 - validationRules[key];
+          isValid = isValid && validDecimals;
+          errorMassage.push(
+            `Only ${validationRules[key]} decimals are allowed`
+          );
+          break;
+        default:
+          throw new Error("Should never reach");
+      }
+      if (!isValid) break;
+    }
+    setElementsConfig({
+      ...elementsConfig,
+      [name]: {
+        ...elementsConfig[name],
+        valid: isValid,
+        touched: true,
+        errorMassage: errorMassage.join(", ")
+      }
+    });
+  };
+
   const elements = {};
 
-  for (let key in formStructure) {
-    const element = formStructure[key];
+  for (let key in elementsConfig) {
+    const element = elementsConfig[key];
     const jsx = (
-      <InputWrapper
-        key={key}
-        label={element.elementConfig.name}
-        isRequired={element.validationRules.required}
-      >
-        <Input
-          elementType={element.elementType}
-          elementConfig={element.elementConfig}
-          isLabelVisible={element.isLabelVisible}
-          handleChange={e => console.dir(e.target.name)}
-        />
-        {element.valid && element.touched && (
-          <ErrorTooltip errorMassage={element.errorMassage} />
-        )}
-      </InputWrapper>
+      <Input
+        elementType={element.elementType}
+        value={element.value}
+        handleChange={handleChange}
+        validate={() => validate(key, element.validationRules)}
+        elementConfig={element.elementConfig}
+        isLabelVisible={element.isLabelVisible}
+      />
     );
     elements[key] = jsx;
   }
@@ -37,10 +101,13 @@ const Form = () => {
     description,
     category,
     payment,
+    fee,
     reward,
     responsible,
     email,
-    startsOn,
+    date,
+    time,
+    timePeriod,
     duration
   } = elements;
 
@@ -51,21 +118,95 @@ const Form = () => {
       </header>
       <form className={classes.Form}>
         <FormSection name="About">
-          {title}
-          {description}
-          {category}
-          {payment}
-          {reward}
+          <InputWrapper label="title" isRequired={true}>
+            {title}
+            {!elementsConfig.title.valid && elementsConfig.title.touched && (
+              <ErrorTooltip errorMassage={elementsConfig.title.errorMassage} />
+            )}
+          </InputWrapper>
+          <InputWrapper label="description" isRequired={true}>
+            {description}
+            {!elementsConfig.description.valid &&
+              elementsConfig.description.touched && (
+                <ErrorTooltip
+                  errorMassage={elementsConfig.description.errorMassage}
+                />
+              )}
+          </InputWrapper>
+          <InputWrapper label="category" isRequired={false}>
+            {category}
+            {!elementsConfig.category.valid &&
+              elementsConfig.category.touched && (
+                <ErrorTooltip
+                  errorMassage={elementsConfig.category.errorMassage}
+                />
+              )}
+          </InputWrapper>
+          <InputWrapper label="payment" isRequired={false}>
+            <div>
+              {payment}
+              {elementsConfig.payment.value === "paid" ? { fee } : null}
+            </div>
+            {!elementsConfig.payment.valid &&
+              elementsConfig.payment.touched && (
+                <ErrorTooltip
+                  errorMassage={elementsConfig.payment.errorMassage}
+                />
+              )}
+          </InputWrapper>
+          <InputWrapper label="reward" isRequired={false}>
+            {reward}
+            {!elementsConfig.reward.valid && elementsConfig.reward.touched && (
+              <ErrorTooltip errorMassage={elementsConfig.reward.errorMassage} />
+            )}
+          </InputWrapper>
         </FormSection>
         <FormSection name="Coordinator">
-          {responsible}
-          {email}
+          <InputWrapper label="responsible" isRequired={true}>
+            {responsible}
+            {!elementsConfig.responsible.valid &&
+              elementsConfig.responsible.touched && (
+                <ErrorTooltip
+                  errorMassage={elementsConfig.responsible.errorMassage}
+                />
+              )}
+          </InputWrapper>
+          <InputWrapper label="email" isRequired={false}>
+            {email}
+            {!elementsConfig.email.valid && elementsConfig.email.touched && (
+              <ErrorTooltip errorMassage={elementsConfig.email.errorMassage} />
+            )}
+          </InputWrapper>
         </FormSection>
         <FormSection name="When">
-          {startsOn}
-          {duration}
+          <InputWrapper label="starts on" isRequired={true}>
+            <div className={classes.inline}>
+              {date}
+              {time}
+              {timePeriod}
+            </div>
+            {!elementsConfig.date.valid && elementsConfig.date.touched && (
+              <ErrorTooltip errorMassage={elementsConfig.date.errorMassage} />
+            )}
+            {!elementsConfig.time.valid && elementsConfig.time.touched && (
+              <ErrorTooltip errorMassage={elementsConfig.time.errorMassage} />
+            )}
+            {!elementsConfig.timePeriod.valid &&
+              elementsConfig.timePeriod.touched && (
+                <ErrorTooltip errorMassage={elementsConfig.date.errorMassage} />
+              )}
+          </InputWrapper>
+          <InputWrapper label="duration" isRequired={false}>
+            {duration}
+            {!elementsConfig.duration.valid &&
+              elementsConfig.duration.touched && (
+                <ErrorTooltip
+                  errorMassage={elementsConfig.duration.errorMassage}
+                />
+              )}
+          </InputWrapper>
         </FormSection>
-        <Button name="Publish Event" />
+        <Button name="Publish Event" type="submit" disabled={!isFromValid} />
       </form>
     </Fragment>
   );
