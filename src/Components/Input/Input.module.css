@@ -17,6 +17,10 @@ textarea.Input {
   resize: none;
 }
 
+.Invalid {
+  border-color: #ffb2b2;
+}
+
 .Input__Group {
   display: flex;
   justify-items: start;

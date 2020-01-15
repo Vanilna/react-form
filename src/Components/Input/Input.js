@@ -5,7 +5,7 @@ const Input = props => {
   let inputElement = null;
   const inputClasses = [classes.Input];
 
-  if (props.invalid && props.touched) {
+  if (!props.isValid && props.isTouched) {
     inputClasses.push(classes.Invalid);
   }
 
@@ -13,7 +13,7 @@ const Input = props => {
     case "input":
       inputElement = (
         <input
-          className={inputClasses.join("")}
+          className={inputClasses.join(" ")}
           {...props.elementConfig}
           value={props.value}
           onChange={props.handleChange}
@@ -91,6 +91,7 @@ const Input = props => {
   return (
     <Fragment>
       {inputElement}
+      {console.log("here")}
       {/* <label
         className={props.isLabelVisible ? classes.LabelVisible : classes.Label}
         htmlFor={props.key}

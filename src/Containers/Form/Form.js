@@ -40,7 +40,6 @@ const Form = () => {
         case "maxlength":
           const toLong = value.length > validationRules[key];
           isValid = isValid && !toLong;
-          console.log(isValid, !toLong);
           errorMassage.push("Text is to long");
           break;
         case "isEmail":
@@ -53,7 +52,6 @@ const Form = () => {
           const commaIndex = value.indexOf(",");
           const isInteger = (dotIndex || commaIndex) === -1;
           if (isInteger) break;
-          console.log(isInteger);
           const validDecimals =
             dotIndex !== -1
               ? dotIndex >= value.length - 1 - validationRules[key]
@@ -91,6 +89,8 @@ const Form = () => {
         validate={() => validate(key, element.validationRules)}
         elementConfig={element.elementConfig}
         isLabelVisible={element.isLabelVisible}
+        isValid={element.valid}
+        isTouched={element.touched}
       />
     );
     elements[key] = jsx;
