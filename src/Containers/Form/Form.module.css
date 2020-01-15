@@ -24,3 +24,7 @@
   align-items: center;
   justify-items: start;
 }
+
+.paddingLR {
+  padding: 0 1rem;
+}

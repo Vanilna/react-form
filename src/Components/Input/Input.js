@@ -4,6 +4,9 @@ import classes from "./Input.module.css";
 const Input = props => {
   let inputElement = null;
   const inputClasses = [classes.Input];
+  const labelClass = props.isLabelVisible
+    ? classes.LabelVisible
+    : classes.Label;
 
   if (!props.isValid && props.isTouched) {
     inputClasses.push(classes.Invalid);
@@ -12,20 +15,25 @@ const Input = props => {
   switch (props.elementType) {
     case "input":
       inputElement = (
-        <input
-          className={inputClasses.join(" ")}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.handleChange}
-          onBlur={props.validate}
-          id={props.key}
-        />
+        <Fragment>
+          <label className={labelClass} htmlFor={props.key}>
+            {props.label}
+          </label>
+          <input
+            className={inputClasses.join(" ")}
+            {...props.elementConfig}
+            value={props.value}
+            onChange={props.handleChange}
+            onBlur={props.validate}
+            id={props.key}
+          />
+        </Fragment>
       );
       break;
     case "textarea":
       inputElement = (
         <textarea
-          className={inputClasses.join("")}
+          className={inputClasses.join(" ")}
           {...props.elementConfig}
           value={props.value}
           onChange={props.handleChange}
@@ -37,7 +45,7 @@ const Input = props => {
     case "select":
       inputElement = (
         <select
-          className={inputClasses.join("")}
+          className={inputClasses.join(" ")}
           value={props.value}
           onChange={props.handleChange}
           onBlur={props.validate}
@@ -64,7 +72,7 @@ const Input = props => {
             return (
               <Fragment key={element.id}>
                 <input
-                  className={inputClasses.join("")}
+                  className={inputClasses.join(" ")}
                   {...element.elementConfig}
                   onChange={props.handleChange}
                   onBlur={props.validate}
@@ -83,7 +91,7 @@ const Input = props => {
     default:
       inputElement = (
         <input
-          className={inputClasses.join("")}
+          className={inputClasses.join(" ")}
           {...props.elementConfig}
           value={props.value}
           onChange={props.handleChange}
@@ -93,17 +101,7 @@ const Input = props => {
       );
   }
 
-  return (
-    <Fragment>
-      {inputElement}
-      {/* <label
-        className={props.isLabelVisible ? classes.LabelVisible : classes.Label}
-        htmlFor={props.key}
-      >
-        {props.label}
-      </label> */}
-    </Fragment>
-  );
+  return inputElement;
 };
 
 export default Input;

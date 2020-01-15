@@ -62,6 +62,7 @@ const formStructure = {
             name: "payment",
             "aria-label": "free event"
           },
+          isLabelVisible: true,
           label: "Free event",
           id: 1
         },
@@ -72,13 +73,13 @@ const formStructure = {
             value: "paid",
             "aria-label": "paid event"
           },
+          isLabelVisible: true,
           label: "Paid event",
           id: 2
         }
       ],
       name: "payment"
     },
-    isLabelVisible: false,
     value: "free",
     validationRules: null,
     valid: true,
@@ -94,6 +95,7 @@ const formStructure = {
       "aria-label": "Fee"
     },
     isLabelVisible: true,
+    label: "$",
     value: "",
     validationRules: {
       decimals: 2
@@ -112,6 +114,7 @@ const formStructure = {
       "aria-label": "Reward"
     },
     isLabelVisible: true,
+    label: "reward points for attendance",
     value: "",
     validationRules: {
       decimals: 0
@@ -131,6 +134,7 @@ const formStructure = {
     validationRules: {
       required: true
     },
+    isLabelVisible: false,
     errorMassage: "",
     valid: true,
     touched: false
@@ -145,9 +149,9 @@ const formStructure = {
     },
     value: "",
     validationRules: {
-      required: true,
       isEmail: true
     },
+    isLabelVisible: false,
     errorMassage: "",
     valid: true,
     touched: false
@@ -163,6 +167,7 @@ const formStructure = {
     validationRules: {
       required: true
     },
+    isLabelVisible: false,
     valid: true,
     touched: false
   },
@@ -177,6 +182,7 @@ const formStructure = {
     validationRules: {
       required: true
     },
+    isLabelVisible: false,
     valid: true,
     touched: false
   },
@@ -192,6 +198,7 @@ const formStructure = {
             checked: true,
             "aria-label": "AM"
           },
+          isLabelVisible: true,
           label: "AM",
           id: 1
         },
@@ -203,13 +210,13 @@ const formStructure = {
             checked: false,
             "aria-label": "PM"
           },
+          isLabelVisible: true,
           label: "PM",
           id: 2
         }
       ],
       name: "period"
     },
-    isLabelVisible: false,
     value: "AM",
     validationRules: null,
     valid: true,
@@ -226,9 +233,9 @@ const formStructure = {
     },
     value: "",
     validationRules: {
-      required: true,
       decimals: 1
     },
+    isLabelVisible: false,
     errorMassage: "",
     valid: true,
     touched: false

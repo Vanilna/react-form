@@ -4,7 +4,6 @@ import Button from "../../Components/Button/Button";
 import classes from "./Form.module.css";
 import InputWrapper from "../../Components/InputWrapper/InputWrapper";
 import Input from "../../Components/Input/Input";
-import ErrorTooltip from "../../Components/ErrorTooltip/ErrorTooltip";
 import formStructure from "../../Data/FormStructure";
 
 const Form = () => {
@@ -43,6 +42,7 @@ const Form = () => {
           errorMassage.push("Text is to long");
           break;
         case "isEmail":
+          if (value.trim() === "") break;
           const isEmail = value.indexOf("@") !== -1;
           isValid = isValid && isEmail;
           errorMassage.push("Not a valid email");
@@ -81,6 +81,7 @@ const Form = () => {
 
   for (let key in elementsConfig) {
     const element = elementsConfig[key];
+    const label = element.label ? element.label : key;
     const jsx = (
       <Input
         elementType={element.elementType}
@@ -91,6 +92,7 @@ const Form = () => {
         isLabelVisible={element.isLabelVisible}
         isValid={element.valid}
         isTouched={element.touched}
+        label={label}
       />
     );
     elements[key] = jsx;
@@ -118,93 +120,103 @@ const Form = () => {
       </header>
       <form className={classes.Form}>
         <FormSection name="About">
-          <InputWrapper label="title" isRequired={true}>
+          <InputWrapper
+            label="title"
+            isRequired={true}
+            errorMassage={elementsConfig.title.errorMassage}
+            invalid={
+              !elementsConfig.title.valid && elementsConfig.title.touched
+            }
+          >
             {title}
-            {!elementsConfig.title.valid && elementsConfig.title.touched && (
-              <ErrorTooltip errorMassage={elementsConfig.title.errorMassage} />
-            )}
           </InputWrapper>
-          <InputWrapper label="description" isRequired={true}>
+          <InputWrapper
+            label="description"
+            isRequired={true}
+            errorMassage={elementsConfig.description.errorMassage}
+            invalid={
+              !elementsConfig.description.valid &&
+              elementsConfig.description.touched
+            }
+          >
             {description}
-            {!elementsConfig.description.valid &&
-              elementsConfig.description.touched && (
-                <ErrorTooltip
-                  errorMassage={elementsConfig.description.errorMassage}
-                />
-              )}
           </InputWrapper>
           <InputWrapper label="category" isRequired={false}>
             {category}
-            {!elementsConfig.category.valid &&
-              elementsConfig.category.touched && (
-                <ErrorTooltip
-                  errorMassage={elementsConfig.category.errorMassage}
-                />
-              )}
           </InputWrapper>
-          <InputWrapper label="payment" isRequired={false}>
+          <InputWrapper
+            label="payment"
+            isRequired={false}
+            errorMassage={elementsConfig.fee.errorMassage}
+            invalid={!elementsConfig.fee.valid && elementsConfig.fee.touched}
+          >
             <div className={classes.inline}>
               {payment}
-              {elementsConfig.payment.value === "paid" && (
-                <Fragment>{fee}</Fragment>
-              )}
+              {elementsConfig.payment.value === "paid" ? fee : null}
             </div>
-            {!elementsConfig.payment.valid &&
-              elementsConfig.payment.touched && (
-                <ErrorTooltip
-                  errorMassage={elementsConfig.payment.errorMassage}
-                />
-              )}
           </InputWrapper>
-          <InputWrapper label="reward" isRequired={false}>
+          <InputWrapper
+            label="reward"
+            isRequired={false}
+            errorMassage={elementsConfig.reward.errorMassage}
+            invalid={
+              !elementsConfig.reward.valid && elementsConfig.reward.touched
+            }
+          >
             {reward}
-            {!elementsConfig.reward.valid && elementsConfig.reward.touched && (
-              <ErrorTooltip errorMassage={elementsConfig.reward.errorMassage} />
-            )}
           </InputWrapper>
         </FormSection>
         <FormSection name="Coordinator">
-          <InputWrapper label="responsible" isRequired={true}>
+          <InputWrapper
+            label="responsible"
+            isRequired={true}
+            errorMassage={elementsConfig.responsible.errorMassage}
+            invalid={
+              !elementsConfig.responsible.valid &&
+              elementsConfig.responsible.touched
+            }
+          >
             {responsible}
-            {!elementsConfig.responsible.valid &&
-              elementsConfig.responsible.touched && (
-                <ErrorTooltip
-                  errorMassage={elementsConfig.responsible.errorMassage}
-                />
-              )}
           </InputWrapper>
-          <InputWrapper label="email" isRequired={false}>
+          <InputWrapper
+            label="email"
+            isRequired={false}
+            errorMassage={elementsConfig.email.errorMassage}
+            invalid={
+              !elementsConfig.email.valid && elementsConfig.email.touched
+            }
+          >
             {email}
-            {!elementsConfig.email.valid && elementsConfig.email.touched && (
-              <ErrorTooltip errorMassage={elementsConfig.email.errorMassage} />
-            )}
           </InputWrapper>
         </FormSection>
         <FormSection name="When">
-          <InputWrapper label="starts on" isRequired={true}>
+          <InputWrapper
+            label="starts on"
+            isRequired={true}
+            errorMassage={
+              elementsConfig.date.errorMassage ||
+              elementsConfig.time.errorMassage
+            }
+            invalid={
+              (!elementsConfig.date.valid && elementsConfig.date.touched) ||
+              (!elementsConfig.time.valid && elementsConfig.time.touched)
+            }
+          >
             <div className={classes.inline}>
-              {date}
+              {date} <span className={classes.paddingLR}>at</span>
               {time}
               {period}
             </div>
-            {!elementsConfig.date.valid && elementsConfig.date.touched && (
-              <ErrorTooltip errorMassage={elementsConfig.date.errorMassage} />
-            )}
-            {!elementsConfig.time.valid && elementsConfig.time.touched && (
-              <ErrorTooltip errorMassage={elementsConfig.time.errorMassage} />
-            )}
-            {!elementsConfig.period.valid && elementsConfig.period.touched && (
-              <ErrorTooltip errorMassage={elementsConfig.date.errorMassage} />
-            )}
           </InputWrapper>
-          <InputWrapper label="duration" isRequired={false}>
+          <InputWrapper
+            label="duration"
+            isRequired={false}
+            errorMassage={elementsConfig.duration.errorMassage}
+            invalid={
+              !elementsConfig.duration.valid && elementsConfig.duration.touched
+            }
+          >
             {duration}
-            {!elementsConfig.duration.valid &&
-              elementsConfig.duration.touched && (
-                <ErrorTooltip
-                  errorMassage={elementsConfig.duration.errorMassage}
-                />
-              )}
           </InputWrapper>
         </FormSection>
         <Button name="Publish Event" type="submit" disabled={!isFromValid} />

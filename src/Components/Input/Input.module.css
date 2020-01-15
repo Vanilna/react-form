@@ -20,6 +20,15 @@ textarea.Input {
   border-color: #ffb2b2;
 }
 
+.Input[type="number"] {
+  max-width: 7rem;
+}
+
+.Input[type="date"],
+.Input[type="time"] {
+  max-width: 12rem;
+}
+
 .Input__Group {
   display: flex;
   justify-items: start;
