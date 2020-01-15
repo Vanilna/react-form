@@ -42,36 +42,41 @@ const Input = props => {
           onChange={props.handleChange}
           onBlur={props.validate}
           id={props.key}
+          name={props.elementConfig.name}
         >
-          {props.elementConfig.options.map(option => (
-            <option
-              key={option.id}
-              value={option.name}
-              disabled={option.disabled}
-            >
-              {option.name}
-            </option>
-          ))}
+          {props.elementConfig.options.map(option => {
+            const name = option.lastname
+              ? `${option.name} ${option.lastname}`
+              : option.name;
+            return (
+              <option key={option.id} value={name}>
+                {name}
+              </option>
+            );
+          })}
         </select>
       );
       break;
     case "radio__group":
       inputElement = (
         <div className={classes.Input__Group}>
-          {props.elementConfig.options.map(element => (
-            <Fragment key={element.id}>
-              <input
-                className={inputClasses.join("")}
-                {...element.elementConfig}
-                onChange={props.handleChange}
-                name={element.name}
-                id={element.name}
-              />
-              <label htmlFor={element.name} className={classes.LabelVisible}>
-                {element.label}
-              </label>
-            </Fragment>
-          ))}
+          {props.elementConfig.options.map(element => {
+            return (
+              <Fragment key={element.id}>
+                <input
+                  className={inputClasses.join("")}
+                  {...element.elementConfig}
+                  onChange={props.handleChange}
+                  onBlur={props.validate}
+                  id={element.name}
+                  checked={props.value === element.elementConfig.value}
+                />
+                <label htmlFor={element.name} className={classes.LabelVisible}>
+                  {element.label}
+                </label>
+              </Fragment>
+            );
+          })}
         </div>
       );
       break;
@@ -91,7 +96,6 @@ const Input = props => {
   return (
     <Fragment>
       {inputElement}
-      {console.log("here")}
       {/* <label
         className={props.isLabelVisible ? classes.LabelVisible : classes.Label}
         htmlFor={props.key}

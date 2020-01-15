@@ -107,7 +107,7 @@ const Form = () => {
     email,
     date,
     time,
-    timePeriod,
+    period,
     duration
   } = elements;
 
@@ -143,9 +143,11 @@ const Form = () => {
               )}
           </InputWrapper>
           <InputWrapper label="payment" isRequired={false}>
-            <div>
+            <div className={classes.inline}>
               {payment}
-              {elementsConfig.payment.value === "paid" ? { fee } : null}
+              {elementsConfig.payment.value === "paid" && (
+                <Fragment>{fee}</Fragment>
+              )}
             </div>
             {!elementsConfig.payment.valid &&
               elementsConfig.payment.touched && (
@@ -183,7 +185,7 @@ const Form = () => {
             <div className={classes.inline}>
               {date}
               {time}
-              {timePeriod}
+              {period}
             </div>
             {!elementsConfig.date.valid && elementsConfig.date.touched && (
               <ErrorTooltip errorMassage={elementsConfig.date.errorMassage} />
@@ -191,10 +193,9 @@ const Form = () => {
             {!elementsConfig.time.valid && elementsConfig.time.touched && (
               <ErrorTooltip errorMassage={elementsConfig.time.errorMassage} />
             )}
-            {!elementsConfig.timePeriod.valid &&
-              elementsConfig.timePeriod.touched && (
-                <ErrorTooltip errorMassage={elementsConfig.date.errorMassage} />
-              )}
+            {!elementsConfig.period.valid && elementsConfig.period.touched && (
+              <ErrorTooltip errorMassage={elementsConfig.date.errorMassage} />
+            )}
           </InputWrapper>
           <InputWrapper label="duration" isRequired={false}>
             {duration}

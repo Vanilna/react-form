@@ -46,7 +46,7 @@ const formStructure = {
       options: [...categories]
     },
     isLabelVisible: false,
-    value: "",
+    value: "Select category",
     validationRules: null,
     valid: true,
     touched: false
@@ -60,7 +60,6 @@ const formStructure = {
             type: "radio",
             value: "free",
             name: "payment",
-            checked: true,
             "aria-label": "free event"
           },
           label: "Free event",
@@ -181,7 +180,7 @@ const formStructure = {
     valid: true,
     touched: false
   },
-  timePeriod: {
+  period: {
     elementType: "radio__group",
     elementConfig: {
       options: [
