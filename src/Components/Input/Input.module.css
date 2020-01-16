@@ -4,7 +4,7 @@
   color: #676767;
   padding: 0.4rem;
   font-family: inherit;
-  width: auto;
+  width: 100%;
 }
 
 .Input::placeholder {
@@ -43,6 +43,7 @@ textarea.Input {
   font-weight: 500;
   color: #676767;
   display: flex;
+  padding: 0 0.4rem;
 }
 
 .Label {
@@ -52,4 +53,9 @@ textarea.Input {
   overflow: hidden;
   clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
   clip: rect(1px, 1px, 1px, 1px);
+}
+
+.Wrapper {
+  display: flex;
+  align-items: center;
 }

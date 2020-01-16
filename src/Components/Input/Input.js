@@ -15,10 +15,7 @@ const Input = props => {
   switch (props.elementType) {
     case "input":
       inputElement = (
-        <Fragment>
-          <label className={labelClass} htmlFor={props.key}>
-            {props.label}
-          </label>
+        <div className={classes.Wrapper}>
           <input
             className={inputClasses.join(" ")}
             {...props.elementConfig}
@@ -27,7 +24,10 @@ const Input = props => {
             onBlur={props.validate}
             id={props.key}
           />
-        </Fragment>
+          <label className={labelClass} htmlFor={props.key}>
+            {props.label}
+          </label>
+        </div>
       );
       break;
     case "textarea":
