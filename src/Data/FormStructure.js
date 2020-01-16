@@ -12,9 +12,7 @@ const formStructure = {
     },
     isLabelVisible: false,
     value: "",
-    validationRules: {
-      required: true
-    },
+    validationRules: [{ type: "REQUIRED", payload: { name: "title" } }],
     errorMassage: "",
     valid: true,
     touched: false
@@ -30,9 +28,7 @@ const formStructure = {
     },
     isLabelVisible: false,
     value: "",
-    validationRules: {
-      required: true
-    },
+    validationRules: [{ type: "REQUIRED", payload: { name: "description" } }],
     errorMassage: "",
     valid: true,
     touched: false
@@ -89,16 +85,15 @@ const formStructure = {
     elementConfig: {
       type: "number",
       name: "fee",
-      step: "0.01",
       placeholder: "Number",
       "aria-label": "Fee"
     },
     isLabelVisible: true,
     label: "$",
     value: "",
-    validationRules: {
-      decimals: 2
-    },
+    validationRules: [
+      { type: "DECIMALS", payload: { name: "fee", quantity: 2 } }
+    ],
     errorMassage: "",
     valid: true,
     touched: false
@@ -108,16 +103,15 @@ const formStructure = {
     elementConfig: {
       type: "number",
       name: "reward",
-      step: 1,
       placeholder: "Number",
       "aria-label": "Reward"
     },
     isLabelVisible: true,
     label: "reward points for attendance",
     value: "",
-    validationRules: {
-      decimals: 0
-    },
+    validationRules: [
+      { type: "DECIMALS", payload: { name: "reward", quantity: 0 } }
+    ],
     errorMassage: "",
     valid: true,
     touched: false
@@ -130,9 +124,7 @@ const formStructure = {
       options: [...employees]
     },
     value: "",
-    validationRules: {
-      required: true
-    },
+    validationRules: [{ type: "REQUIRED", payload: { name: "description" } }],
     isLabelVisible: false,
     errorMassage: "",
     valid: true,
@@ -147,9 +139,7 @@ const formStructure = {
       "aria-label": "Email"
     },
     value: "",
-    validationRules: {
-      isEmail: true
-    },
+    validationRules: [{ type: "IS_EMAIL", payload: { name: "email" } }],
     isLabelVisible: false,
     errorMassage: "",
     valid: true,
@@ -163,9 +153,7 @@ const formStructure = {
       "aria-label": "Date"
     },
     value: "",
-    validationRules: {
-      required: true
-    },
+    validationRules: [{ type: "REQUIRED", payload: { name: "date" } }],
     isLabelVisible: false,
     valid: true,
     touched: false
@@ -178,9 +166,7 @@ const formStructure = {
       "aria-label": "Time"
     },
     value: "",
-    validationRules: {
-      required: true
-    },
+    validationRules: [{ type: "REQUIRED", payload: { name: "time" } }],
     isLabelVisible: false,
     valid: true,
     touched: false
@@ -226,14 +212,13 @@ const formStructure = {
     elementConfig: {
       type: "number",
       name: "duration",
-      step: "0.5",
       placeholder: "Number",
       "aria-label": "Duration"
     },
     value: "",
-    validationRules: {
-      decimals: 1
-    },
+    validationRules: [
+      { type: "DECIMALS", payload: { name: "reward", quantity: 0 } }
+    ],
     isLabelVisible: true,
     label: "hour",
     errorMassage: "",

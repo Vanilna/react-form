@@ -20,8 +20,7 @@ const Input = props => {
             className={inputClasses.join(" ")}
             {...props.elementConfig}
             value={props.value}
-            onChange={props.handleChange}
-            onBlur={props.validate}
+            onChange={e => props.handleChange(e)}
             id={props.id}
           />
           <label className={labelClass} htmlFor={props.id}>

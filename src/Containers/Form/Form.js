@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useReducer } from "react";
 import classes from "./Form.module.css";
 import formStructure from "../../Data/FormStructure";
 
@@ -7,115 +7,137 @@ import InputWrapper from "../../Components/InputWrapper/InputWrapper";
 import Input from "../../Components/Input/Input";
 import Button from "../../Components/Button/Button";
 
+const reducer = (state, action) => {
+  const name = action.payload.name;
+
+  let value = "";
+  if (action.payload.value === "" || action.payload.value) {
+    value = action.payload.value;
+  } else {
+    value = state[name].value;
+  }
+
+  switch (action.type) {
+    case "CHANGE_VALUE":
+      return {
+        ...state,
+        [name]: {
+          ...state[name],
+          value: value,
+          valid: true,
+          touched: true
+        }
+      };
+    case "REQUIRED":
+      const isEmpty = value.trim() === "";
+      return {
+        ...state,
+        [name]: {
+          ...state[name],
+          valid: !isEmpty,
+          touched: true,
+          errorMassage: `${name} is required`
+        }
+      };
+    case "DECIMALS":
+      //check how many decimals are there
+      //allow them due to rules configuration
+      const dotIndex = value.indexOf(".");
+      const commaIndex = value.indexOf(",");
+      const isInteger = (dotIndex || commaIndex) === -1;
+      if (isInteger) {
+        return {
+          ...state
+        };
+      }
+
+      const allowedDecimals = action.payload.quantity;
+      let areDecimalsValid;
+      if (dotIndex !== -1) {
+        const actualDecimals = value.length - 1 - dotIndex;
+        areDecimalsValid = actualDecimals <= allowedDecimals;
+      }
+      if (commaIndex !== -1) {
+        const actualDecimals = value.length - 1 - commaIndex;
+        areDecimalsValid = actualDecimals <= allowedDecimals;
+      }
+      return {
+        ...state,
+        [name]: {
+          ...state[name],
+          valid: areDecimalsValid,
+          touched: true,
+          errorMassage: `Only ${allowedDecimals} decimals are allowed`
+        }
+      };
+    case "IS_EMAIL":
+      //email isn't required so we can allow empty email
+      if (value.trim() === "") return;
+      const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const isEmailValid = regex.test(value);
+      return {
+        ...state,
+        [name]: {
+          ...state[name],
+          valid: isEmailValid,
+          touched: true,
+          errorMassage: "Not a valid email"
+        }
+      };
+    default:
+      throw new Error("Should not reach here");
+  }
+};
+
 const Form = props => {
-  const [elementsConfig, setElementsConfig] = useState(formStructure);
+  const [elementsState, dispatch] = useReducer(reducer, formStructure);
   const [isFromValid, setFromValidity] = useState(false);
 
-  //check form validity
+  //check whole form validity
   useEffect(() => {
-    let isValid = true;
-    for (let key in elementsConfig) {
+    let isValid;
+    for (let key in elementsState) {
       if (
-        elementsConfig[key].validationRules &&
-        elementsConfig[key].validationRules.required
+        elementsState[key].validationRules &&
+        elementsState[key].validationRules.required
       ) {
-        isValid =
-          isValid && elementsConfig[key].valid && elementsConfig[key].touched;
+        isValid = elementsState[key].valid && elementsState[key].touched;
       } else {
-        isValid = isValid && elementsConfig[key].valid;
+        isValid = elementsState[key].valid;
       }
       if (!isValid) break;
     }
     if (isValid !== isFromValid) {
       setFromValidity(isValid);
     }
-  });
+  }, [isFromValid, elementsState, setFromValidity]);
 
-  const handleInputChange = e => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setElementsConfig({
-      ...elementsConfig,
-      [name]: {
-        ...elementsConfig[name],
-        value: value
-      }
+  const handleInputChange = (event, rules, name) => {
+    const value = event.target.value;
+
+    dispatch({
+      type: "CHANGE_VALUE",
+      payload: { value: value, name: name }
     });
-  };
-
-  const validateInput = (name, validationRules) => {
-    if (!validationRules) return;
-
-    let isValid = true;
-    const errorMassage = [];
-    const value = elementsConfig[name].value;
-
-    for (let key in validationRules) {
-      switch (key) {
-        case "required":
-          const isEmpty = value.trim() === "";
-          isValid = isValid && !isEmpty;
-          errorMassage.push(`${name} is required`);
-          break;
-        case "isEmail":
-          //email isn't required so we can allow empty email
-          if (value.trim() === "") break;
-          const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          const isEmail = regex.test(value);
-          isValid = isValid && isEmail;
-          errorMassage.push("Not a valid email");
-          break;
-        case "decimals":
-          //check how many decimals are there
-          //allow them due to rules configuration
-          const dotIndex = value.indexOf(".");
-          const commaIndex = value.indexOf(",");
-          const isInteger = (dotIndex || commaIndex) === -1;
-          if (isInteger) break;
-
-          let areDecimalsValid;
-          if (dotIndex !== -1) {
-            const actualDecimals = value.length - 1 - dotIndex;
-            areDecimalsValid = actualDecimals <= validationRules[key];
-          }
-          if (commaIndex !== -1) {
-            const actualDecimals = value.length - 1 - commaIndex;
-            areDecimalsValid = actualDecimals <= validationRules[key];
-          }
-          isValid = isValid && areDecimalsValid;
-          errorMassage.push(
-            `Only ${validationRules[key]} decimals are allowed`
-          );
-          break;
-        default:
-          throw new Error("Should never reach");
-      }
-
-      if (!isValid) break;
-    }
-
-    setElementsConfig({
-      ...elementsConfig,
-      [name]: {
-        ...elementsConfig[name],
-        valid: isValid,
-        touched: true,
-        errorMassage: errorMassage.join(", ")
-      }
+    if (!rules) return;
+    const element = elementsState[name];
+    rules.forEach(rule => {
+      // if (!element.valid) return;
+      dispatch(rule);
     });
   };
 
   //generate input elements due to form structure
   const elements = {};
-  for (let key in elementsConfig) {
-    const element = elementsConfig[key];
+  for (let key in elementsState) {
+    const element = elementsState[key];
     const label = element.label ? element.label : key;
     const jsx = (
       <Input
         elementType={element.elementType}
         value={element.value}
-        handleChange={handleInputChange}
-        validate={() => validateInput(key, element.validationRules)}
+        handleChange={e => handleInputChange(e, element.validationRules, key)}
+        validate={() => {}}
         elementConfig={element.elementConfig}
         isLabelVisible={element.isLabelVisible}
         isValid={element.valid}
@@ -153,27 +175,25 @@ const Form = props => {
           <InputWrapper
             label="title"
             isRequired={true}
-            errorMassage={elementsConfig.title.errorMassage}
-            invalid={
-              !elementsConfig.title.valid && elementsConfig.title.touched
-            }
+            errorMassage={elementsState.title.errorMassage}
+            invalid={!elementsState.title.valid && elementsState.title.touched}
           >
             {title}
           </InputWrapper>
           <InputWrapper
             label="description"
             isRequired={true}
-            errorMassage={elementsConfig.description.errorMassage}
+            errorMassage={elementsState.description.errorMassage}
             invalid={
-              !elementsConfig.description.valid &&
-              elementsConfig.description.touched
+              !elementsState.description.valid &&
+              elementsState.description.touched
             }
           >
             <div>
               {description}
               <div className={classes.AdditionalInfo}>
                 <p>Max length 140 characters</p>
-                <p>{elementsConfig.description.value.length}/140</p>
+                <p>{elementsState.description.value.length}/140</p>
               </div>
             </div>
           </InputWrapper>
@@ -191,20 +211,20 @@ const Form = props => {
           <InputWrapper
             label="payment"
             isRequired={false}
-            errorMassage={elementsConfig.fee.errorMassage}
-            invalid={!elementsConfig.fee.valid && elementsConfig.fee.touched}
+            errorMassage={elementsState.fee.errorMassage}
+            invalid={!elementsState.fee.valid && elementsState.fee.touched}
           >
             <div className={classes.inline}>
               {payment}
-              {elementsConfig.payment.value === "paid" ? fee : null}
+              {elementsState.payment.value === "paid" ? fee : null}
             </div>
           </InputWrapper>
           <InputWrapper
             label="reward"
             isRequired={false}
-            errorMassage={elementsConfig.reward.errorMassage}
+            errorMassage={elementsState.reward.errorMassage}
             invalid={
-              !elementsConfig.reward.valid && elementsConfig.reward.touched
+              !elementsState.reward.valid && elementsState.reward.touched
             }
           >
             {reward}
@@ -214,10 +234,10 @@ const Form = props => {
           <InputWrapper
             label="responsible"
             isRequired={true}
-            errorMassage={elementsConfig.responsible.errorMassage}
+            errorMassage={elementsState.responsible.errorMassage}
             invalid={
-              !elementsConfig.responsible.valid &&
-              elementsConfig.responsible.touched
+              !elementsState.responsible.valid &&
+              elementsState.responsible.touched
             }
           >
             {responsible}
@@ -225,10 +245,8 @@ const Form = props => {
           <InputWrapper
             label="email"
             isRequired={false}
-            errorMassage={elementsConfig.email.errorMassage}
-            invalid={
-              !elementsConfig.email.valid && elementsConfig.email.touched
-            }
+            errorMassage={elementsState.email.errorMassage}
+            invalid={!elementsState.email.valid && elementsState.email.touched}
           >
             {email}
           </InputWrapper>
@@ -238,12 +256,11 @@ const Form = props => {
             label="starts on"
             isRequired={true}
             errorMassage={
-              elementsConfig.date.errorMassage ||
-              elementsConfig.time.errorMassage
+              elementsState.date.errorMassage || elementsState.time.errorMassage
             }
             invalid={
-              (!elementsConfig.date.valid && elementsConfig.date.touched) ||
-              (!elementsConfig.time.valid && elementsConfig.time.touched)
+              (!elementsState.date.valid && elementsState.date.touched) ||
+              (!elementsState.time.valid && elementsState.time.touched)
             }
           >
             <div className={classes.inline}>
@@ -255,9 +272,9 @@ const Form = props => {
           <InputWrapper
             label="duration"
             isRequired={false}
-            errorMassage={elementsConfig.duration.errorMassage}
+            errorMassage={elementsState.duration.errorMassage}
             invalid={
-              !elementsConfig.duration.valid && elementsConfig.duration.touched
+              !elementsState.duration.valid && elementsState.duration.touched
             }
           >
             {duration}
