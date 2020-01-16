@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import classes from "./Form.module.css";
 import formStructure from "../../Data/FormStructure";
 
@@ -10,6 +10,26 @@ import Button from "../../Components/Button/Button";
 const Form = props => {
   const [elementsConfig, setElementsConfig] = useState(formStructure);
   const [isFromValid, setFromValidity] = useState(false);
+
+  //check form validity
+  useEffect(() => {
+    let isValid = true;
+    for (let key in elementsConfig) {
+      if (
+        elementsConfig[key].validationRules &&
+        elementsConfig[key].validationRules.required
+      ) {
+        isValid =
+          isValid && elementsConfig[key].valid && elementsConfig[key].touched;
+      } else {
+        isValid = isValid && elementsConfig[key].valid;
+      }
+      if (!isValid) break;
+    }
+    if (isValid !== isFromValid) {
+      setFromValidity(isValid);
+    }
+  });
 
   const handleInputChange = e => {
     const name = e.target.name;
@@ -23,7 +43,7 @@ const Form = props => {
     });
   };
 
-  const validate = (name, validationRules) => {
+  const validateInput = (name, validationRules) => {
     if (!validationRules) return;
 
     let isValid = true;
@@ -40,7 +60,8 @@ const Form = props => {
         case "isEmail":
           //email isn't required so we can allow empty email
           if (value.trim() === "") break;
-          const isEmail = value.indexOf("@") !== -1;
+          const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          const isEmail = regex.test(value);
           isValid = isValid && isEmail;
           errorMassage.push("Not a valid email");
           break;
@@ -94,7 +115,7 @@ const Form = props => {
         elementType={element.elementType}
         value={element.value}
         handleChange={handleInputChange}
-        validate={() => validate(key, element.validationRules)}
+        validate={() => validateInput(key, element.validationRules)}
         elementConfig={element.elementConfig}
         isLabelVisible={element.isLabelVisible}
         isValid={element.valid}
