@@ -1,16 +1,17 @@
 import React, { Fragment, useState } from "react";
-import FormSection from "../../Components/FormSection/FormSection";
-import Button from "../../Components/Button/Button";
 import classes from "./Form.module.css";
-import InputWrapper from "../../Components/InputWrapper/InputWrapper";
-import Input from "../../Components/Input/Input";
 import formStructure from "../../Data/FormStructure";
 
-const Form = () => {
+import FormSection from "../../Components/FormSection/FormSection";
+import InputWrapper from "../../Components/InputWrapper/InputWrapper";
+import Input from "../../Components/Input/Input";
+import Button from "../../Components/Button/Button";
+
+const Form = props => {
   const [elementsConfig, setElementsConfig] = useState(formStructure);
   const [isFromValid, setFromValidity] = useState(false);
 
-  const handleChange = e => {
+  const handleInputChange = e => {
     const name = e.target.name;
     const value = e.target.value;
     setElementsConfig({
@@ -36,27 +37,31 @@ const Form = () => {
           isValid = isValid && !isEmpty;
           errorMassage.push(`${name} is required`);
           break;
-        case "maxlength":
-          const toLong = value.length > validationRules[key];
-          isValid = isValid && !toLong;
-          errorMassage.push("Text is to long");
-          break;
         case "isEmail":
+          //email isn't required so we can allow empty email
           if (value.trim() === "") break;
           const isEmail = value.indexOf("@") !== -1;
           isValid = isValid && isEmail;
           errorMassage.push("Not a valid email");
           break;
         case "decimals":
+          //check how many decimals are there
+          //allow them due to rules configuration
           const dotIndex = value.indexOf(".");
           const commaIndex = value.indexOf(",");
           const isInteger = (dotIndex || commaIndex) === -1;
           if (isInteger) break;
-          const validDecimals =
-            dotIndex !== -1
-              ? dotIndex >= value.length - 1 - validationRules[key]
-              : commaIndex >= value.length - 1 - validationRules[key];
-          isValid = isValid && validDecimals;
+
+          let areDecimalsValid;
+          if (dotIndex !== -1) {
+            const actualDecimals = value.length - 1 - dotIndex;
+            areDecimalsValid = actualDecimals <= validationRules[key];
+          }
+          if (commaIndex !== -1) {
+            const actualDecimals = value.length - 1 - commaIndex;
+            areDecimalsValid = actualDecimals <= validationRules[key];
+          }
+          isValid = isValid && areDecimalsValid;
           errorMassage.push(
             `Only ${validationRules[key]} decimals are allowed`
           );
@@ -64,8 +69,10 @@ const Form = () => {
         default:
           throw new Error("Should never reach");
       }
+
       if (!isValid) break;
     }
+
     setElementsConfig({
       ...elementsConfig,
       [name]: {
@@ -77,8 +84,8 @@ const Form = () => {
     });
   };
 
+  //generate input elements due to form structure
   const elements = {};
-
   for (let key in elementsConfig) {
     const element = elementsConfig[key];
     const label = element.label ? element.label : key;
@@ -86,7 +93,7 @@ const Form = () => {
       <Input
         elementType={element.elementType}
         value={element.value}
-        handleChange={handleChange}
+        handleChange={handleInputChange}
         validate={() => validate(key, element.validationRules)}
         elementConfig={element.elementConfig}
         isLabelVisible={element.isLabelVisible}
@@ -99,6 +106,7 @@ const Form = () => {
     elements[key] = jsx;
   }
 
+  //form elements ready to use in form
   const {
     title,
     description,

@@ -31,8 +31,7 @@ const formStructure = {
     isLabelVisible: false,
     value: "",
     validationRules: {
-      required: true,
-      maxlength: 140
+      required: true
     },
     errorMassage: "",
     valid: true,
