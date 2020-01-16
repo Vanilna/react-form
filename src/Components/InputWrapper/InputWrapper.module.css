@@ -1,10 +1,21 @@
 .Wrapper {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
-  grid-template-rows: 1fr;
-  justify-content: start;
-  align-items: center;
   margin: 1rem 0;
+}
+
+@media (min-width: 700px) {
+  .Wrapper {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 1fr;
+    justify-content: start;
+    align-items: center;
+  }
+  .InputContent {
+    grid-column: 2 / -1;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    align-items: center;
+  }
 }
 
 .Label {
@@ -13,16 +24,9 @@
   font-size: 0.8rem;
   font-weight: 500;
   text-transform: uppercase;
-  margin: 0;
+  margin-top: 0;
 }
 
 .Required {
   color: rgb(214, 4, 4);
-}
-
-.InputContent {
-  grid-column: 2 / -1;
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  align-items: center;
 }
