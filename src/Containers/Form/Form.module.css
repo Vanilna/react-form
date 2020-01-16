@@ -19,6 +19,18 @@
   margin: 0 auto;
 }
 
+.AdditionalInfo {
+  display: flex;
+  justify-content: space-between;
+  color: #c9c9c9;
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+.AdditionalInfo p {
+  margin: 0.1rem;
+}
+
 .inline {
   display: flex;
   align-items: center;

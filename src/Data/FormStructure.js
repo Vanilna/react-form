@@ -26,7 +26,7 @@ const formStructure = {
       name: "description",
       placeholder: "Write about your event, be creative",
       "aria-label": "Description",
-      rows: 4
+      rows: 6
     },
     isLabelVisible: false,
     value: "",

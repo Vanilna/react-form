@@ -140,10 +140,24 @@ const Form = () => {
               elementsConfig.description.touched
             }
           >
-            {description}
+            <div>
+              {description}
+              <div className={classes.AdditionalInfo}>
+                <p>Max length 140 characters</p>
+                <p>{elementsConfig.description.value.length}/140</p>
+              </div>
+            </div>
           </InputWrapper>
           <InputWrapper label="category" isRequired={false}>
-            {category}
+            <div>
+              {category}
+              <div className={classes.AdditionalInfo}>
+                <p>
+                  Describes topic and people who should be interested in this
+                  event
+                </p>
+              </div>
+            </div>
           </InputWrapper>
           <InputWrapper
             label="payment"
