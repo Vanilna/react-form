@@ -22,9 +22,9 @@ const Input = props => {
             value={props.value}
             onChange={props.handleChange}
             onBlur={props.validate}
-            id={props.key}
+            id={props.id}
           />
-          <label className={labelClass} htmlFor={props.key}>
+          <label className={labelClass} htmlFor={props.id}>
             {props.label}
           </label>
         </div>
@@ -32,37 +32,47 @@ const Input = props => {
       break;
     case "textarea":
       inputElement = (
-        <textarea
-          className={inputClasses.join(" ")}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.handleChange}
-          onBlur={props.validate}
-          id={props.key}
-        />
+        <div className={classes.Wrapper}>
+          <textarea
+            className={inputClasses.join(" ")}
+            {...props.elementConfig}
+            value={props.value}
+            onChange={props.handleChange}
+            onBlur={props.validate}
+            id={props.id}
+          />
+          <label className={labelClass} htmlFor={props.id}>
+            {props.label}
+          </label>
+        </div>
       );
       break;
     case "select":
       inputElement = (
-        <select
-          className={inputClasses.join(" ")}
-          value={props.value}
-          onChange={props.handleChange}
-          onBlur={props.validate}
-          id={props.key}
-          name={props.elementConfig.name}
-        >
-          {props.elementConfig.options.map(option => {
-            const name = option.lastname
-              ? `${option.name} ${option.lastname}`
-              : option.name;
-            return (
-              <option key={option.id} value={name}>
-                {name}
-              </option>
-            );
-          })}
-        </select>
+        <div className={classes.Wrapper}>
+          <select
+            className={inputClasses.join(" ")}
+            value={props.value}
+            onChange={props.handleChange}
+            onBlur={props.validate}
+            id={props.id}
+            name={props.elementConfig.name}
+          >
+            {props.elementConfig.options.map(option => {
+              const name = option.lastname
+                ? `${option.name} ${option.lastname}`
+                : option.name;
+              return (
+                <option key={option.id} value={name}>
+                  {name}
+                </option>
+              );
+            })}
+          </select>
+          <label className={labelClass} htmlFor={props.id}>
+            {props.label}
+          </label>
+        </div>
       );
       break;
     case "radio__group":
@@ -90,14 +100,19 @@ const Input = props => {
       break;
     default:
       inputElement = (
-        <input
-          className={inputClasses.join(" ")}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.handleChange}
-          onBlur={props.validate}
-          id={props.key}
-        />
+        <div className={classes.Wrapper}>
+          <input
+            className={inputClasses.join(" ")}
+            {...props.elementConfig}
+            value={props.value}
+            onChange={props.handleChange}
+            onBlur={props.validate}
+            id={props.id}
+          />
+          <label className={labelClass} htmlFor={props.id}>
+            {props.label}
+          </label>
+        </div>
       );
   }
 

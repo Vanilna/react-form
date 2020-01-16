@@ -93,6 +93,7 @@ const Form = () => {
         isValid={element.valid}
         isTouched={element.touched}
         label={label}
+        id={key}
       />
     );
     elements[key] = jsx;

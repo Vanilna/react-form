@@ -235,7 +235,8 @@ const formStructure = {
     validationRules: {
       decimals: 1
     },
-    isLabelVisible: false,
+    isLabelVisible: true,
+    label: "hour",
     errorMassage: "",
     valid: true,
     touched: false
