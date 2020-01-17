@@ -81,7 +81,12 @@ const reducer = (state, action) => {
       };
     case "IS_EMAIL":
       //email isn't required so we can allow empty email
-      if (value.trim() === "") return;
+      //need to return state like this
+      //because empty return or break erase state
+      if (value.trim() === "")
+        return {
+          ...state
+        };
       const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       const isEmailValid = regex.test(value);
       return {
@@ -104,6 +109,19 @@ const reducer = (state, action) => {
           valid: true,
           touched: false,
           errorMassage: ""
+        }
+      };
+    case "DATE_FROM_TODAY":
+      const dateEntered = Date.parse(value);
+      const today = Date.parse(action.payload.today);
+      const isDateValid = dateEntered >= today;
+      return {
+        ...state,
+        [name]: {
+          ...state[name],
+          valid: isDateValid,
+          touched: true,
+          errorMassage: "Date can't be in past"
         }
       };
     default:

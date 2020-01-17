@@ -199,7 +199,10 @@ const formStructure = {
       "aria-label": "Date"
     },
     value: "",
-    validationRules: [{ type: "REQUIRED", payload: { name: "date" } }],
+    validationRules: [
+      { type: "REQUIRED", payload: { name: "date" } },
+      { type: "DATE_FROM_TODAY", payload: { name: "date", today: today } }
+    ],
     isLabelVisible: false,
     valid: true,
     touched: false
