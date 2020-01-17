@@ -8,7 +8,6 @@ import Input from "../../Components/Input/Input";
 import Button from "../../Components/Button/Button";
 
 const reducer = (state, action) => {
-  console.log(action);
   const name = action.payload.name;
   let value = "";
   if (action.payload.value === "" || action.payload.value) {
@@ -69,7 +68,6 @@ const reducer = (state, action) => {
       //in invalid positions
       //without this empty input value is returned
       const valid = action.payload.nativelyValid;
-      console.log(valid);
       return {
         ...state,
         [name]: {
@@ -135,17 +133,14 @@ const Form = props => {
 
   //check whole form validity
   useEffect(() => {
-    let isValid;
+    let isValid = true;
     for (let key in elementsState) {
-      if (
-        elementsState[key].validationRules &&
-        elementsState[key].validationRules.required
-      ) {
-        isValid = elementsState[key].valid && elementsState[key].touched;
+      if (elementsState[key].required) {
+        isValid =
+          isValid && elementsState[key].valid && elementsState[key].touched;
       } else {
-        isValid = elementsState[key].valid;
+        isValid = isValid && elementsState[key].valid;
       }
-      if (!isValid) break;
     }
     if (isValid !== isFromValid) {
       setFromValidity(isValid);

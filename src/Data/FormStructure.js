@@ -47,7 +47,8 @@ const formStructure = {
     validationRules: [{ type: "REQUIRED", payload: { name: "title" } }],
     errorMassage: "",
     valid: true,
-    touched: false
+    touched: false,
+    required: true
   },
   description: {
     elementType: "textarea",
@@ -63,7 +64,8 @@ const formStructure = {
     validationRules: [{ type: "REQUIRED", payload: { name: "description" } }],
     errorMassage: "",
     valid: true,
-    touched: false
+    touched: false,
+    required: true
   },
   category: {
     elementType: "select",
@@ -84,7 +86,8 @@ const formStructure = {
     value: "Select category",
     validationRules: null,
     valid: true,
-    touched: false
+    touched: false,
+    required: false
   },
   payment: {
     elementType: "radio__group",
@@ -118,7 +121,8 @@ const formStructure = {
     value: "free",
     validationRules: [{ type: "FEE_CLEAR_UP", payload: { name: "payment" } }],
     valid: true,
-    touched: false
+    touched: false,
+    required: false
   },
   fee: {
     elementType: "input",
@@ -139,7 +143,9 @@ const formStructure = {
     ],
     errorMassage: "",
     valid: true,
-    touched: false
+    touched: false,
+    //required only if payment === "paid"
+    required: false
   },
   reward: {
     elementType: "input",
@@ -159,7 +165,8 @@ const formStructure = {
     ],
     errorMassage: "",
     valid: true,
-    touched: false
+    touched: false,
+    required: false
   },
   responsible: {
     elementType: "select",
@@ -173,7 +180,8 @@ const formStructure = {
     isLabelVisible: false,
     errorMassage: "",
     valid: true,
-    touched: false
+    touched: false,
+    required: true
   },
   email: {
     elementType: "input",
@@ -188,7 +196,8 @@ const formStructure = {
     isLabelVisible: false,
     errorMassage: "",
     valid: true,
-    touched: false
+    touched: false,
+    required: false
   },
   date: {
     elementType: "input",
@@ -205,7 +214,8 @@ const formStructure = {
     ],
     isLabelVisible: false,
     valid: true,
-    touched: false
+    touched: false,
+    required: true
   },
   time: {
     elementType: "input",
@@ -224,7 +234,8 @@ const formStructure = {
     ],
     isLabelVisible: false,
     valid: true,
-    touched: false
+    touched: false,
+    required: true
   },
   period: {
     elementType: "radio__group",
@@ -260,7 +271,8 @@ const formStructure = {
     value: "AM",
     validationRules: null,
     valid: true,
-    touched: false
+    touched: false,
+    required: false
   },
   duration: {
     elementType: "input",
@@ -280,7 +292,8 @@ const formStructure = {
     label: "hour",
     errorMassage: "",
     valid: true,
-    touched: false
+    touched: false,
+    required: false
   }
 };
 
