@@ -101,9 +101,10 @@ const formStructure = {
     label: "$",
     value: "",
     validationRules: [
+      //important more specific validations should come last
+      { type: "REQUIRED", payload: { name: "fee" } },
       { type: "NUMBER", payload: { name: "fee" } },
-      { type: "DECIMALS", payload: { name: "fee", quantity: 2 } },
-      { type: "REQUIRED", payload: { name: "fee" } }
+      { type: "DECIMALS", payload: { name: "fee", quantity: 2 } }
     ],
     errorMassage: "",
     valid: true,
@@ -121,6 +122,7 @@ const formStructure = {
     label: "reward points for attendance",
     value: "",
     validationRules: [
+      //important more specific validations should come last
       { type: "NUMBER", payload: { name: "reward" } },
       { type: "DECIMALS", payload: { name: "reward", quantity: 0 } }
     ],
@@ -229,6 +231,7 @@ const formStructure = {
     },
     value: "",
     validationRules: [
+      //important more specific validations should come last
       { type: "NUMBER", payload: { name: "duration" } },
       { type: "DECIMALS", payload: { name: "duration", quantity: 0 } }
     ],

@@ -42,24 +42,17 @@ const reducer = (state, action) => {
     case "DECIMALS":
       //check how many decimals are there
       //allow them due to rules configuration
+      console.log(value);
       const dotIndex = value.indexOf(".");
-      const commaIndex = value.indexOf(",");
-      const isInteger = (dotIndex || commaIndex) === -1;
+      const isInteger = dotIndex === -1;
       if (isInteger) {
         return {
           ...state
         };
       }
       const allowedDecimals = action.payload.quantity;
-      let areDecimalsValid;
-      if (dotIndex !== -1) {
-        const actualDecimals = value.length - 1 - dotIndex;
-        areDecimalsValid = actualDecimals <= allowedDecimals;
-      }
-      if (commaIndex !== -1) {
-        const actualDecimals = value.length - 1 - commaIndex;
-        areDecimalsValid = actualDecimals <= allowedDecimals;
-      }
+      const actualDecimals = value.length - 1 - dotIndex;
+      let areDecimalsValid = actualDecimals <= allowedDecimals;
       return {
         ...state,
         [name]: {
