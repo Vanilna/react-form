@@ -63,7 +63,12 @@ const Input = props => {
                 ? `${option.name} ${option.lastname}`
                 : option.name;
               return (
-                <option key={option.id} value={name} disabled={option.disabled}>
+                <option
+                  key={option.id}
+                  value={name}
+                  disabled={option.disabled}
+                  style={option.style}
+                >
                   {name}
                 </option>
               );

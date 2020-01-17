@@ -29,6 +29,10 @@ textarea.Input {
   max-width: 12rem;
 }
 
+option:disabled {
+  color: #c9c9c9;
+}
+
 .Input__Group {
   display: flex;
   justify-items: start;

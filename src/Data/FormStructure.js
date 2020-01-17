@@ -2,6 +2,29 @@ import categories from "./categories.json";
 import employees from "./employees.json";
 
 const currentlyLoggedId = 3;
+const notLoggedEmployees = employees.filter(employee => employee.id !== 3);
+const loggedPerson = employees[currentlyLoggedId];
+//employees with the logged one at the beginning
+const loggedEmployees = [
+  {
+    id: 100,
+    name: `Me - ${loggedPerson.name} ${loggedPerson.lastname}`,
+    disabled: true,
+    style: { display: "none" }
+  },
+  {
+    id: 101,
+    name: "Me",
+    disabled: true
+  },
+  loggedPerson,
+  {
+    id: 102,
+    name: "Others",
+    disabled: true
+  },
+  ...notLoggedEmployees
+];
 
 //events can't be created previous to the actual date
 //so we need actual date in format valid for min attribute in date input
@@ -51,7 +74,8 @@ const formStructure = {
         {
           id: 100,
           name: "Select category",
-          disabled: true
+          disabled: true,
+          style: { display: "none" }
         },
         ...categories
       ]
@@ -142,9 +166,9 @@ const formStructure = {
     elementConfig: {
       name: "responsible",
       "aria-label": "Responsible",
-      options: [...employees]
+      options: loggedEmployees
     },
-    value: "",
+    value: `Me - ${loggedPerson.name} ${loggedPerson.lastname}`,
     validationRules: [{ type: "REQUIRED", payload: { name: "responsible" } }],
     isLabelVisible: false,
     errorMassage: "",
