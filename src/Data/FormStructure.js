@@ -3,6 +3,13 @@ import employees from "./employees.json";
 
 const currentlyLoggedId = 3;
 
+//events can't be created previous to the actual date
+//so we need actual date in format valid for min attribute in date input
+const date = new Date();
+let month = date.getMonth() + 1;
+month = `${month}`.length <= 1 ? `0${month}` : month;
+const today = `${date.getFullYear()}-${month}-${date.getDate()}`;
+
 const formStructure = {
   title: {
     elementType: "input",
@@ -164,6 +171,7 @@ const formStructure = {
     elementConfig: {
       type: "date",
       name: "date",
+      min: today,
       "aria-label": "Date"
     },
     value: "",
