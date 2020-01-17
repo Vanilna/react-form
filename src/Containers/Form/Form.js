@@ -8,8 +8,11 @@ import Input from "../../Components/Input/Input";
 import Button from "../../Components/Button/Button";
 
 const reducer = (state, action) => {
+  console.log(action);
+  console.log(state);
   const name = action.payload.name;
   let value = "";
+  let errorMassage = "";
   if (action.payload.value === "" || action.payload.value) {
     value = action.payload.value;
   } else {
@@ -24,18 +27,20 @@ const reducer = (state, action) => {
           ...state[name],
           value: value,
           valid: true,
-          touched: true
+          touched: true,
+          errorMassage: ""
         }
       };
     case "REQUIRED":
       const isEmpty = value.trim() === "";
+      if (isEmpty) errorMassage = `${name} is required`;
       return {
         ...state,
         [name]: {
           ...state[name],
           valid: !isEmpty,
           touched: true,
-          errorMassage: `${name} is required`
+          errorMassage: errorMassage
         }
       };
     case "DECIMALS":
@@ -54,13 +59,15 @@ const reducer = (state, action) => {
       const allowedDecimals = action.payload.quantity;
       const actualDecimals = value.length - 1 - dotIndex;
       let areDecimalsValid = actualDecimals <= allowedDecimals;
+      if (!areDecimalsValid)
+        errorMassage = `Only ${allowedDecimals} decimals are allowed`;
       return {
         ...state,
         [name]: {
           ...state[name],
           valid: areDecimalsValid,
           touched: true,
-          errorMassage: `Only ${allowedDecimals} decimals are allowed`
+          errorMassage: errorMassage
         }
       };
     case "NATIVE":
@@ -68,13 +75,14 @@ const reducer = (state, action) => {
       //in invalid positions
       //without this empty input value is returned
       const valid = action.payload.nativelyValid;
+      if (!valid) errorMassage = `Invalid ${name}`;
       return {
         ...state,
         [name]: {
           ...state[name],
           valid: valid,
           touched: true,
-          errorMassage: `Invalid ${name}`
+          errorMassage: errorMassage
         }
       };
     case "IS_EMAIL":
@@ -87,13 +95,14 @@ const reducer = (state, action) => {
         };
       const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       const isEmailValid = regex.test(value);
+      if (!isEmailValid) errorMassage = "Email not valid";
       return {
         ...state,
         [name]: {
           ...state[name],
           valid: isEmailValid,
           touched: true,
-          errorMassage: "Not a valid email"
+          errorMassage: errorMassage
         }
       };
     case "FEE_CLEAR_UP":
@@ -113,13 +122,14 @@ const reducer = (state, action) => {
       const dateEntered = Date.parse(value);
       const today = Date.parse(action.payload.today);
       const isDateValid = dateEntered >= today;
+      if (!isDateValid) errorMassage = "Date can't be in past";
       return {
         ...state,
         [name]: {
           ...state[name],
           valid: isDateValid,
           touched: true,
-          errorMassage: "Date can't be in past"
+          errorMassage: errorMassage
         }
       };
     default:
@@ -135,7 +145,10 @@ const Form = props => {
   useEffect(() => {
     let isValid = true;
     for (let key in elementsState) {
-      if (elementsState[key].required) {
+      if (
+        elementsState[key].required ||
+        (key === "fee" && elementsState.payment.value === "paid")
+      ) {
         isValid =
           isValid && elementsState[key].valid && elementsState[key].touched;
       } else {
@@ -171,6 +184,73 @@ const Form = props => {
       }
       dispatch(rule);
     });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    const convertTime = (time, period) => {
+      const timeArr = time.split(":");
+      const [hours, minutes] = timeArr;
+      let hoursTransformed = hours;
+      if (hours === "12" && period === "PM") {
+        hoursTransformed = "00";
+      } else if (period === "PM") {
+        hoursTransformed = hours === "12" ? 12 : parseFloat(hours) + 12;
+      }
+      return `${hoursTransformed}:${minutes}`;
+    };
+
+    const result = {};
+    for (let key in elementsState) {
+      switch (key) {
+        case "category":
+          const categoryState = elementsState.category;
+          const selectedC = categoryState.elementConfig.options.find(
+            el => categoryState.value === el.name
+          );
+          result.category = selectedC.id === 100 ? null : selectedC.id;
+          break;
+        case "payment":
+          result["paid_event"] = elementsState.payment.value === "paid";
+          break;
+        case "fee":
+          result["event_fee"] = parseFloat(elementsState.fee.value);
+          break;
+        case "reward":
+          result.reward = parseFloat(elementsState.reward.value);
+          break;
+        case "date":
+          const time = elementsState.time.value;
+          const period = elementsState.period.value;
+          const timeTransformed = convertTime(time, period);
+          result.date = `${elementsState.date.value}T${timeTransformed}`;
+          break;
+        case "duration":
+          result.duration = parseFloat(elementsState.duration.value) * 60;
+          break;
+        case "responsible":
+          const name = elementsState.responsible.value.split(" ")[0];
+          const selectedR = elementsState.responsible.elementConfig.options.find(
+            option => option.name === name
+          );
+          const responsible = {
+            email: selectedR.email,
+            id: selectedR.id
+          };
+          result.coordinator = responsible;
+          break;
+        case "email":
+          break;
+        case "time":
+          break;
+        case "period":
+          break;
+        default:
+          result[key] = elementsState[key].value;
+      }
+    }
+    console.log(result);
   };
 
   //generate input elements due to form structure
@@ -216,7 +296,7 @@ const Form = props => {
       <header className={classes.Header}>
         <h1>New Event</h1>
       </header>
-      <form className={classes.Form}>
+      <form className={classes.Form} onSubmit={handleSubmit}>
         <FormSection name="About">
           <InputWrapper
             label="title"

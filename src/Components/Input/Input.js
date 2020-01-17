@@ -38,7 +38,7 @@ const Input = props => {
             {...props.elementConfig}
             value={props.value}
             onChange={props.handleChange}
-            onBlur={props.validate}
+            onBlur={e => props.handleChange(e)}
             id={props.id}
           />
           <label className={labelClass} htmlFor={props.id}>
@@ -54,7 +54,7 @@ const Input = props => {
             className={inputClasses.join(" ")}
             value={props.value}
             onChange={props.handleChange}
-            onBlur={props.validate}
+            onBlur={e => props.handleChange(e)}
             id={props.id}
             name={props.elementConfig.name}
           >
@@ -90,7 +90,7 @@ const Input = props => {
                   className={inputClasses.join(" ")}
                   {...element.elementConfig}
                   onChange={props.handleChange}
-                  onBlur={props.validate}
+                  onBlur={e => props.handleChange(e)}
                   id={element.name}
                   checked={props.value === element.elementConfig.value}
                 />
@@ -111,7 +111,7 @@ const Input = props => {
             {...props.elementConfig}
             value={props.value}
             onChange={props.handleChange}
-            onBlur={props.validate}
+            onBlur={e => props.handleChange(e)}
             id={props.id}
           />
           <label className={labelClass} htmlFor={props.id}>

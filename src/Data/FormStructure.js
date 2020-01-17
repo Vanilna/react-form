@@ -133,7 +133,7 @@ const formStructure = {
       "aria-label": "Fee"
     },
     isLabelVisible: true,
-    label: "$",
+    label: "$ *",
     value: "",
     validationRules: [
       //important more specific validations should come last
@@ -222,8 +222,8 @@ const formStructure = {
     elementConfig: {
       type: "time",
       name: "time",
-      min: "00:00",
-      max: "11:59",
+      min: "01:00",
+      max: "12:59",
       "aria-label": "Time"
     },
     value: "",
