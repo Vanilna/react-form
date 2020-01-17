@@ -1,0 +1,14 @@
+.Header {
+  background-color: #355990;
+  border-top: 0.7rem solid #1e3b68;
+  padding: 1rem 0;
+  margin-bottom: 3rem;
+}
+
+.Header h1 {
+  font-weight: 300;
+  color: #fff;
+  padding-bottom: 0.8rem;
+  max-width: 80%;
+  margin: 0 auto;
+}

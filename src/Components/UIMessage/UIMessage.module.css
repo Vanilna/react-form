@@ -1,0 +1,16 @@
+.Block {
+  width: 90vw;
+  max-width: 800px;
+  margin: 0 auto;
+  border: 0.05rem solid #d0d0d0;
+  border-radius: 0.3rem;
+  box-shadow: 0px 0px 0.5rem #d0d0d0;
+  padding: 1.5rem 2.5rem;
+  margin-bottom: 1.2rem;
+  background-color: #f0fcf3;
+}
+
+.Heading_Success {
+  color: #70bf75;
+  font-weight: 500;
+}

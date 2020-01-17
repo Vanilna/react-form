@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect, useReducer } from "react";
 import classes from "./Form.module.css";
-import formStructure from "../../Data/FormStructure";
+import formStructure from "../../Data/formStructure";
 
 import FormSection from "../../Components/FormSection/FormSection";
 import InputWrapper from "../../Components/InputWrapper/InputWrapper";
@@ -8,8 +8,6 @@ import Input from "../../Components/Input/Input";
 import Button from "../../Components/Button/Button";
 
 const reducer = (state, action) => {
-  console.log(action);
-  console.log(state);
   const name = action.payload.name;
   let value = "";
   let errorMassage = "";
@@ -193,7 +191,7 @@ const Form = props => {
       const timeArr = time.split(":");
       const [hours, minutes] = timeArr;
       let hoursTransformed = hours;
-      if (hours === "12" && period === "PM") {
+      if (hours === "12" && period === "AM") {
         hoursTransformed = "00";
       } else if (period === "PM") {
         hoursTransformed = hours === "12" ? 12 : parseFloat(hours) + 12;
@@ -234,8 +232,11 @@ const Form = props => {
           const selectedR = elementsState.responsible.elementConfig.options.find(
             option => option.name === name
           );
+          const email = elementsState.email.value
+            ? elementsState.email.value
+            : selectedR.email;
           const responsible = {
-            email: selectedR.email,
+            email: email,
             id: selectedR.id
           };
           result.coordinator = responsible;
@@ -251,6 +252,7 @@ const Form = props => {
       }
     }
     console.log(result);
+    props.history.push("/success");
   };
 
   //generate input elements due to form structure
@@ -292,123 +294,116 @@ const Form = props => {
   } = elements;
 
   return (
-    <Fragment>
-      <header className={classes.Header}>
-        <h1>New Event</h1>
-      </header>
-      <form className={classes.Form} onSubmit={handleSubmit}>
-        <FormSection name="About">
-          <InputWrapper
-            label="title"
-            isRequired={true}
-            errorMassage={elementsState.title.errorMassage}
-            invalid={!elementsState.title.valid && elementsState.title.touched}
-          >
-            {title}
-          </InputWrapper>
-          <InputWrapper
-            label="description"
-            isRequired={true}
-            errorMassage={elementsState.description.errorMassage}
-            invalid={
-              !elementsState.description.valid &&
-              elementsState.description.touched
-            }
-          >
-            <div>
-              {description}
-              <div className={classes.AdditionalInfo}>
-                <p>Max length 140 characters</p>
-                <p>{elementsState.description.value.length}/140</p>
-              </div>
+    <form className={classes.Form} onSubmit={handleSubmit}>
+      <FormSection name="About">
+        <InputWrapper
+          label="title"
+          isRequired={true}
+          errorMassage={elementsState.title.errorMassage}
+          invalid={!elementsState.title.valid && elementsState.title.touched}
+        >
+          {title}
+        </InputWrapper>
+        <InputWrapper
+          label="description"
+          isRequired={true}
+          errorMassage={elementsState.description.errorMassage}
+          invalid={
+            !elementsState.description.valid &&
+            elementsState.description.touched
+          }
+        >
+          <div>
+            {description}
+            <div className={classes.AdditionalInfo}>
+              <p>Max length 140 characters</p>
+              <p>{elementsState.description.value.length}/140</p>
             </div>
-          </InputWrapper>
-          <InputWrapper label="category" isRequired={false}>
-            <div>
-              {category}
-              <div className={classes.AdditionalInfo}>
-                <p>
-                  Describes topic and people who should be interested in this
-                  event
-                </p>
-              </div>
+          </div>
+        </InputWrapper>
+        <InputWrapper label="category" isRequired={false}>
+          <div>
+            {category}
+            <div className={classes.AdditionalInfo}>
+              <p>
+                Describes topic and people who should be interested in this
+                event
+              </p>
             </div>
-          </InputWrapper>
-          <InputWrapper
-            label="payment"
-            isRequired={false}
-            errorMassage={elementsState.fee.errorMassage}
-            invalid={!elementsState.fee.valid && elementsState.fee.touched}
-          >
-            <div className={classes.inline}>
-              {payment}
-              {elementsState.payment.value === "paid" ? fee : null}
-            </div>
-          </InputWrapper>
-          <InputWrapper
-            label="reward"
-            isRequired={false}
-            errorMassage={elementsState.reward.errorMassage}
-            invalid={
-              !elementsState.reward.valid && elementsState.reward.touched
-            }
-          >
-            {reward}
-          </InputWrapper>
-        </FormSection>
-        <FormSection name="Coordinator">
-          <InputWrapper
-            label="responsible"
-            isRequired={true}
-            errorMassage={elementsState.responsible.errorMassage}
-            invalid={
-              !elementsState.responsible.valid &&
-              elementsState.responsible.touched
-            }
-          >
-            {responsible}
-          </InputWrapper>
-          <InputWrapper
-            label="email"
-            isRequired={false}
-            errorMassage={elementsState.email.errorMassage}
-            invalid={!elementsState.email.valid && elementsState.email.touched}
-          >
-            {email}
-          </InputWrapper>
-        </FormSection>
-        <FormSection name="When">
-          <InputWrapper
-            label="starts on"
-            isRequired={true}
-            errorMassage={
-              elementsState.date.errorMassage || elementsState.time.errorMassage
-            }
-            invalid={
-              (!elementsState.date.valid && elementsState.date.touched) ||
-              (!elementsState.time.valid && elementsState.time.touched)
-            }
-          >
-            <div className={classes.inline}>
-              {date} <span className={classes.paddingLR}>at</span>
-              {time}
-              {period}
-            </div>
-          </InputWrapper>
-          <InputWrapper
-            label="duration"
-            isRequired={false}
-            errorMassage={elementsState.duration.errorMassage}
-            invalid={
-              !elementsState.duration.valid && elementsState.duration.touched
-            }
-          >
-            {duration}
-          </InputWrapper>
-        </FormSection>
-        <Button name="Publish Event" type="submit" disabled={!isFromValid} />
-      </form>
-    </Fragment>
+          </div>
+        </InputWrapper>
+        <InputWrapper
+          label="payment"
+          isRequired={false}
+          errorMassage={elementsState.fee.errorMassage}
+          invalid={!elementsState.fee.valid && elementsState.fee.touched}
+        >
+          <div className={classes.inline}>
+            {payment}
+            {elementsState.payment.value === "paid" ? fee : null}
+          </div>
+        </InputWrapper>
+        <InputWrapper
+          label="reward"
+          isRequired={false}
+          errorMassage={elementsState.reward.errorMassage}
+          invalid={!elementsState.reward.valid && elementsState.reward.touched}
+        >
+          {reward}
+        </InputWrapper>
+      </FormSection>
+      <FormSection name="Coordinator">
+        <InputWrapper
+          label="responsible"
+          isRequired={true}
+          errorMassage={elementsState.responsible.errorMassage}
+          invalid={
+            !elementsState.responsible.valid &&
+            elementsState.responsible.touched
+          }
+        >
+          {responsible}
+        </InputWrapper>
+        <InputWrapper
+          label="email"
+          isRequired={false}
+          errorMassage={elementsState.email.errorMassage}
+          invalid={!elementsState.email.valid && elementsState.email.touched}
+        >
+          {email}
+        </InputWrapper>
+      </FormSection>
+      <FormSection name="When">
+        <InputWrapper
+          label="starts on"
+          isRequired={true}
+          errorMassage={
+            elementsState.date.errorMassage || elementsState.time.errorMassage
+          }
+          invalid={
+            (!elementsState.date.valid && elementsState.date.touched) ||
+            (!elementsState.time.valid && elementsState.time.touched)
+          }
+        >
+          <div className={classes.inline}>
+            {date} <span className={classes.paddingLR}>at</span>
+            {time}
+            {period}
+          </div>
+        </InputWrapper>
+        <InputWrapper
+          label="duration"
+          isRequired={false}
+          errorMassage={elementsState.duration.errorMassage}
+          invalid={
+            !elementsState.duration.valid && elementsState.duration.touched
+          }
+        >
+          {duration}
+        </InputWrapper>
+      </FormSection>
+      <Button name="Publish Event" type="submit" disabled={!isFromValid} />
+    </form>
   );
 };
 
