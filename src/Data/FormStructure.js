@@ -85,7 +85,7 @@ const formStructure = {
       name: "payment"
     },
     value: "free",
-    validationRules: null,
+    validationRules: [{ type: "FEE_CLEAR_UP", payload: { name: "payment" } }],
     valid: true,
     touched: false
   },

@@ -8,6 +8,7 @@ import Input from "../../Components/Input/Input";
 import Button from "../../Components/Button/Button";
 
 const reducer = (state, action) => {
+  console.log(action);
   const name = action.payload.name;
   let value = "";
   if (action.payload.value === "" || action.payload.value) {
@@ -15,8 +16,6 @@ const reducer = (state, action) => {
   } else {
     value = state[name].value;
   }
-
-  console.log(action);
 
   switch (action.type) {
     case "CHANGE_VALUE":
@@ -71,6 +70,9 @@ const reducer = (state, action) => {
         }
       };
     case "NUMBER":
+      //use native validation to prevent from entering .-+eE
+      //in invalid positions
+      //without this empty input value is returned
       const valid = action.payload.nativelyValid;
       return {
         ...state,
@@ -93,6 +95,19 @@ const reducer = (state, action) => {
           valid: isEmailValid,
           touched: true,
           errorMassage: "Not a valid email"
+        }
+      };
+    case "FEE_CLEAR_UP":
+      //clearing up error massages, validation and value
+      //when changing from paid event to free
+      return {
+        ...state,
+        fee: {
+          ...state.fee,
+          value: "",
+          valid: true,
+          touched: false,
+          errorMassage: ""
         }
       };
     default:
