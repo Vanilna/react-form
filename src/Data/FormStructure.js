@@ -1,6 +1,8 @@
 import categories from "./categories.json";
 import employees from "./employees.json";
 
+const currentlyLoggedId = 3;
+
 const formStructure = {
   title: {
     elementType: "input",
@@ -38,7 +40,14 @@ const formStructure = {
     elementConfig: {
       name: "category",
       "aria-label": "Category",
-      options: [...categories]
+      options: [
+        {
+          id: 100,
+          name: "Select category",
+          disabled: true
+        },
+        ...categories
+      ]
     },
     isLabelVisible: false,
     value: "Select category",
@@ -92,7 +101,9 @@ const formStructure = {
     label: "$",
     value: "",
     validationRules: [
-      { type: "DECIMALS", payload: { name: "fee", quantity: 2 } }
+      { type: "NUMBER", payload: { name: "fee" } },
+      { type: "DECIMALS", payload: { name: "fee", quantity: 2 } },
+      { type: "REQUIRED", payload: { name: "fee" } }
     ],
     errorMassage: "",
     valid: true,
@@ -110,6 +121,7 @@ const formStructure = {
     label: "reward points for attendance",
     value: "",
     validationRules: [
+      { type: "NUMBER", payload: { name: "reward" } },
       { type: "DECIMALS", payload: { name: "reward", quantity: 0 } }
     ],
     errorMassage: "",
@@ -124,7 +136,7 @@ const formStructure = {
       options: [...employees]
     },
     value: "",
-    validationRules: [{ type: "REQUIRED", payload: { name: "description" } }],
+    validationRules: [{ type: "REQUIRED", payload: { name: "responsible" } }],
     isLabelVisible: false,
     errorMassage: "",
     valid: true,
@@ -217,7 +229,8 @@ const formStructure = {
     },
     value: "",
     validationRules: [
-      { type: "DECIMALS", payload: { name: "reward", quantity: 0 } }
+      { type: "NUMBER", payload: { name: "duration" } },
+      { type: "DECIMALS", payload: { name: "duration", quantity: 0 } }
     ],
     isLabelVisible: true,
     label: "hour",

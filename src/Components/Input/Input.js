@@ -21,6 +21,7 @@ const Input = props => {
             {...props.elementConfig}
             value={props.value}
             onChange={e => props.handleChange(e)}
+            onBlur={e => props.handleChange(e)}
             id={props.id}
           />
           <label className={labelClass} htmlFor={props.id}>
@@ -62,7 +63,7 @@ const Input = props => {
                 ? `${option.name} ${option.lastname}`
                 : option.name;
               return (
-                <option key={option.id} value={name}>
+                <option key={option.id} value={name} disabled={option.disabled}>
                   {name}
                 </option>
               );

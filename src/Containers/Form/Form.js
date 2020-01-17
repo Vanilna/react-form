@@ -9,13 +9,14 @@ import Button from "../../Components/Button/Button";
 
 const reducer = (state, action) => {
   const name = action.payload.name;
-
   let value = "";
   if (action.payload.value === "" || action.payload.value) {
     value = action.payload.value;
   } else {
     value = state[name].value;
   }
+
+  console.log(action);
 
   switch (action.type) {
     case "CHANGE_VALUE":
@@ -50,7 +51,6 @@ const reducer = (state, action) => {
           ...state
         };
       }
-
       const allowedDecimals = action.payload.quantity;
       let areDecimalsValid;
       if (dotIndex !== -1) {
@@ -68,6 +68,17 @@ const reducer = (state, action) => {
           valid: areDecimalsValid,
           touched: true,
           errorMassage: `Only ${allowedDecimals} decimals are allowed`
+        }
+      };
+    case "NUMBER":
+      const valid = action.payload.nativelyValid;
+      return {
+        ...state,
+        [name]: {
+          ...state[name],
+          valid: valid,
+          touched: true,
+          errorMassage: "Invalid number"
         }
       };
     case "IS_EMAIL":
@@ -114,7 +125,7 @@ const Form = props => {
 
   const handleInputChange = (event, rules, name) => {
     const value = event.target.value;
-
+    const nativelyValid = event.target.validity.valid;
     dispatch({
       type: "CHANGE_VALUE",
       payload: { value: value, name: name }
@@ -122,7 +133,16 @@ const Form = props => {
     if (!rules) return;
     const element = elementsState[name];
     rules.forEach(rule => {
-      // if (!element.valid) return;
+      //add native validation to NUMBER payload
+      if (rule.type === "NUMBER") {
+        rule = {
+          ...rule,
+          payload: {
+            ...rule.payload,
+            nativelyValid
+          }
+        };
+      }
       dispatch(rule);
     });
   };
