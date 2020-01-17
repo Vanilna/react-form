@@ -42,9 +42,11 @@ const reducer = (state, action) => {
     case "DECIMALS":
       //check how many decimals are there
       //allow them due to rules configuration
-      console.log(value);
       const dotIndex = value.indexOf(".");
       const isInteger = dotIndex === -1;
+      //return state unchanged
+      //need to return state like this
+      //because empty return or break erase state
       if (isInteger) {
         return {
           ...state
@@ -62,18 +64,19 @@ const reducer = (state, action) => {
           errorMassage: `Only ${allowedDecimals} decimals are allowed`
         }
       };
-    case "NUMBER":
+    case "NATIVE":
       //use native validation to prevent from entering .-+eE
       //in invalid positions
       //without this empty input value is returned
       const valid = action.payload.nativelyValid;
+      console.log(valid);
       return {
         ...state,
         [name]: {
           ...state[name],
           valid: valid,
           touched: true,
-          errorMassage: "Invalid number"
+          errorMassage: `Invalid ${name}`
         }
       };
     case "IS_EMAIL":
@@ -134,15 +137,17 @@ const Form = props => {
   const handleInputChange = (event, rules, name) => {
     const value = event.target.value;
     const nativelyValid = event.target.validity.valid;
+    //handle change
     dispatch({
       type: "CHANGE_VALUE",
       payload: { value: value, name: name }
     });
+
+    //validate value
     if (!rules) return;
-    const element = elementsState[name];
     rules.forEach(rule => {
-      //add native validation to NUMBER payload
-      if (rule.type === "NUMBER") {
+      //add native validation to payload
+      if (rule.type === "NATIVE") {
         rule = {
           ...rule,
           payload: {

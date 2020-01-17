@@ -103,7 +103,7 @@ const formStructure = {
     validationRules: [
       //important more specific validations should come last
       { type: "REQUIRED", payload: { name: "fee" } },
-      { type: "NUMBER", payload: { name: "fee" } },
+      { type: "NATIVE", payload: { name: "fee" } },
       { type: "DECIMALS", payload: { name: "fee", quantity: 2 } }
     ],
     errorMassage: "",
@@ -123,7 +123,7 @@ const formStructure = {
     value: "",
     validationRules: [
       //important more specific validations should come last
-      { type: "NUMBER", payload: { name: "reward" } },
+      { type: "NATIVE", payload: { name: "reward" } },
       { type: "DECIMALS", payload: { name: "reward", quantity: 0 } }
     ],
     errorMassage: "",
@@ -177,10 +177,16 @@ const formStructure = {
     elementConfig: {
       type: "time",
       name: "time",
+      min: "00:00",
+      max: "11:59",
       "aria-label": "Time"
     },
     value: "",
-    validationRules: [{ type: "REQUIRED", payload: { name: "time" } }],
+    validationRules: [
+      //important more specific validations should come last
+      { type: "REQUIRED", payload: { name: "time" } },
+      { type: "NATIVE", payload: { name: "time" } }
+    ],
     isLabelVisible: false,
     valid: true,
     touched: false
@@ -232,7 +238,7 @@ const formStructure = {
     value: "",
     validationRules: [
       //important more specific validations should come last
-      { type: "NUMBER", payload: { name: "duration" } },
+      { type: "NATIVE", payload: { name: "duration" } },
       { type: "DECIMALS", payload: { name: "duration", quantity: 0 } }
     ],
     isLabelVisible: true,
