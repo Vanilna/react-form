@@ -1,3 +1,4 @@
+import React, { Fragment } from "react";
 import categories from "./categories.json";
 import employees from "./employees.json";
 
@@ -32,6 +33,8 @@ const date = new Date();
 let month = date.getMonth() + 1;
 month = `${month}`.length <= 1 ? `0${month}` : month;
 const today = `${date.getFullYear()}-${month}-${date.getDate()}`;
+
+const required = () => <span>*</span>;
 
 const formStructure = {
   title: {
@@ -133,7 +136,11 @@ const formStructure = {
       "aria-label": "Fee"
     },
     isLabelVisible: true,
-    label: "$ *",
+    label: (
+      <Fragment>
+        $<span style={{ color: "#d60404" }}>*</span>
+      </Fragment>
+    ),
     value: "",
     validationRules: [
       //important more specific validations should come last
