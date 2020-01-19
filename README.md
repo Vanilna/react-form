@@ -14,7 +14,7 @@ Runs the app in the development mode on [http://localhost:3000](http://localhost
 
 Builds the app for production.
 
-##Project structure:
+## Project structure:
 
     ├── src/
     │   ├── index.js             # app entry file
