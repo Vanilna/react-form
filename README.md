@@ -2,7 +2,7 @@ This project was created to practice React, while creating advanced form.
 I've decided not to use third party packages to handle form, but do id with just React.
 If it would be code for production, I would probably use "React Final Forms" or "React Hook Form".
 
-\\\\ Available Scripts
+## Available Scripts
 
 In the project directory, you can run:
 
@@ -14,7 +14,7 @@ Runs the app in the development mode on [http://localhost:3000](http://localhost
 
 Builds the app for production.
 
-\\\\Project structure:
+##Project structure:
 
     ├── src/
     │   ├── index.js             # app entry file
