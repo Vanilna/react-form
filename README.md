@@ -31,7 +31,7 @@ Builds the app for production.
     │   ├── Data
     │   │   ├── categories.json  # mock data
     │   │   ├── employees.json   # mock data
-    │   │   └── formStructure    # config for input fields and their state
+    │   │   └── formStructure    # config for input fields, their state and initial data transformation
     ├── public/
     │   ├── index.html           # index.html template
     │   └── ...

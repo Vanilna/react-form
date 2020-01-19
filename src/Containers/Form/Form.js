@@ -1,6 +1,6 @@
-import React, { Fragment, useState, useEffect, useReducer } from "react";
-import classes from "./Form.module.css";
+import React, { useState, useEffect, useReducer } from "react";
 import formStructure from "../../Data/formStructure";
+import classes from "./Form.module.css";
 
 import FormSection from "../../Components/FormSection/FormSection";
 import InputWrapper from "../../Components/InputWrapper/InputWrapper";
@@ -10,12 +10,12 @@ import Button from "../../Components/Button/Button";
 const reducer = (state, action) => {
   const name = action.payload.name;
   let value = "";
-  let errorMassage = "";
   if (action.payload.value === "" || action.payload.value) {
     value = action.payload.value;
   } else {
     value = state[name].value;
   }
+  let errorMassage = "";
 
   switch (action.type) {
     case "CHANGE_VALUE":
@@ -47,7 +47,6 @@ const reducer = (state, action) => {
       const dotIndex = value.indexOf(".");
       const isInteger = dotIndex === -1;
       //return state unchanged
-      //need to return state like this
       //because empty return or break erase state
       if (isInteger) {
         return {
@@ -70,8 +69,8 @@ const reducer = (state, action) => {
       };
     case "NATIVE":
       //use native validation to prevent from entering .-+eE
-      //in invalid positions
-      //without this empty input value is returned
+      //in invalid positions in number inputs
+      //without this, empty input value is returned
       const valid = action.payload.nativelyValid;
       if (!valid) errorMassage = `Invalid ${name}`;
       return {
@@ -158,9 +157,10 @@ const Form = props => {
     }
   }, [isFromValid, elementsState, setFromValidity]);
 
-  const handleInputChange = (event, rules, name) => {
+  const handleInputChange = (event, name) => {
     const value = event.target.value;
     const nativelyValid = event.target.validity.valid;
+    const rules = elementsState[name].validationRules;
     //handle change
     dispatch({
       type: "CHANGE_VALUE",
@@ -264,8 +264,7 @@ const Form = props => {
       <Input
         elementType={element.elementType}
         value={element.value}
-        handleChange={e => handleInputChange(e, element.validationRules, key)}
-        validate={() => {}}
+        handleChange={e => handleInputChange(e, key)}
         elementConfig={element.elementConfig}
         isLabelVisible={element.isLabelVisible}
         isValid={element.valid}
@@ -277,7 +276,7 @@ const Form = props => {
     elements[key] = jsx;
   }
 
-  //form elements ready to use in form
+  //elements ready to use in form
   const {
     title,
     description,

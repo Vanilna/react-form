@@ -7,17 +7,8 @@
   width: 100%;
 }
 
-.Input::placeholder {
-  color: #c9c9c9;
-  font-size: 0.9rem;
-}
-
 textarea.Input {
   resize: none;
-}
-
-.Invalid {
-  border-color: #fa9696;
 }
 
 .Input[type="number"] {
@@ -27,6 +18,15 @@ textarea.Input {
 .Input[type="date"],
 .Input[type="time"] {
   max-width: 12rem;
+}
+
+.Invalid {
+  border-color: #fa9696;
+}
+
+.Input::placeholder {
+  color: #c9c9c9;
+  font-size: 0.9rem;
 }
 
 option:disabled {

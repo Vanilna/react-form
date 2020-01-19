@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useCallback } from "react";
+import React, { Fragment } from "react";
 import classes from "./Input.module.css";
 
 const Input = props => {
@@ -37,7 +37,7 @@ const Input = props => {
             className={inputClasses.join(" ")}
             {...props.elementConfig}
             value={props.value}
-            onChange={props.handleChange}
+            onChange={e => props.handleChange(e)}
             onBlur={e => props.handleChange(e)}
             id={props.id}
           />
@@ -53,7 +53,7 @@ const Input = props => {
           <select
             className={inputClasses.join(" ")}
             value={props.value}
-            onChange={props.handleChange}
+            onChange={e => props.handleChange(e)}
             onBlur={e => props.handleChange(e)}
             id={props.id}
             name={props.elementConfig.name}
@@ -67,6 +67,7 @@ const Input = props => {
                   key={option.id}
                   value={name}
                   disabled={option.disabled}
+                  //style needed to hide default values (as "Me - Name Surname")
                   style={option.style}
                 >
                   {name}
@@ -89,7 +90,7 @@ const Input = props => {
                 <input
                   className={inputClasses.join(" ")}
                   {...element.elementConfig}
-                  onChange={props.handleChange}
+                  onChange={e => props.handleChange(e)}
                   onBlur={e => props.handleChange(e)}
                   id={element.name}
                   checked={props.value === element.elementConfig.value}
@@ -110,7 +111,7 @@ const Input = props => {
             className={inputClasses.join(" ")}
             {...props.elementConfig}
             value={props.value}
-            onChange={props.handleChange}
+            onChange={e => props.handleChange(e)}
             onBlur={e => props.handleChange(e)}
             id={props.id}
           />

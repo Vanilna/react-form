@@ -2,10 +2,11 @@ import React, { Fragment } from "react";
 import categories from "./categories.json";
 import employees from "./employees.json";
 
+// converting employees to add logged one at the beginning
+// and to add disabled select elements "me", "others" and "placeholder"
 const currentlyLoggedId = 3;
 const notLoggedEmployees = employees.filter(employee => employee.id !== 3);
 const loggedPerson = employees[currentlyLoggedId];
-//employees with the logged one at the beginning
 const loggedEmployees = [
   {
     id: 100,
@@ -27,14 +28,12 @@ const loggedEmployees = [
   ...notLoggedEmployees
 ];
 
-//events can't be created previous to the actual date
-//so we need actual date in format valid for min attribute in date input
+//get current date in correct format for date input
+//disabling dates previous to today
 const date = new Date();
 let month = date.getMonth() + 1;
 month = `${month}`.length <= 1 ? `0${month}` : month;
 const today = `${date.getFullYear()}-${month}-${date.getDate()}`;
-
-const required = () => <span>*</span>;
 
 const formStructure = {
   title: {
@@ -216,6 +215,7 @@ const formStructure = {
     },
     value: "",
     validationRules: [
+      //important more specific validations should come last
       { type: "REQUIRED", payload: { name: "date" } },
       { type: "DATE_FROM_TODAY", payload: { name: "date", today: today } }
     ],
