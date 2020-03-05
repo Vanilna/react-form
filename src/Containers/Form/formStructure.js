@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
-import categories from "./categories.json";
-import employees from "./employees.json";
+import categories from "../../Data/categories.json";
+import employees from "../../Data/employees.json";
 
 // converting employees to add logged one at the beginning
 // and to add disabled select elements "me", "others" and "placeholder"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import formStructure from "../../Data/formStructure";
+import formStructure from "./formStructure";
 import classes from "./Form.module.css";
 
 import FormSection from "../../Components/FormSection/FormSection";
@@ -90,6 +90,7 @@ const reducer = (state, action) => {
         return {
           ...state
         };
+      // eslint-disable-next-line no-useless-escape
       const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       const isEmailValid = regex.test(value);
       if (!isEmailValid) errorMassage = "Email not valid";
